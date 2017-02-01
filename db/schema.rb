@@ -10,26 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170201032519) do
+ActiveRecord::Schema.define(version: 20170201035752) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "users", force: :cascade do |t|
-    t.integer  "type_id"
+    t.integer  "type_id",              default: 0
     t.string   "email"
     t.string   "password"
     t.string   "address_description"
     t.float    "address_latitude"
     t.float    "address_longitude"
-    t.boolean  "have_custom_products"
-    t.integer  "frepi_coins"
-    t.integer  "business_id"
-    t.float    "quota_max"
-    t.float    "current_quota"
-    t.string   "user_group"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.boolean  "have_custom_products", default: false
+    t.integer  "frepi_coins",          default: 0
+    t.integer  "business_id",          default: 0
+    t.integer  "quota_max",            default: 0
+    t.integer  "current_quota",        default: 0
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.integer  "user_group_id",        default: 0
   end
 
 end
