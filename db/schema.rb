@@ -10,41 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170120063212) do
+ActiveRecord::Schema.define(version: 20170201032519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-  enable_extension "uuid-ossp"
-
-  create_table "categories", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "posts", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-    t.string   "title"
-    t.text     "body"
-    t.text     "comment"
-    t.integer  "categorie_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "user_id"
-  end
-
-  create_table "tokens", force: :cascade do |t|
-    t.text     "key"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "users", force: :cascade do |t|
-    t.string   "user"
-    t.text     "password"
+    t.integer  "type_id"
     t.string   "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "password"
+    t.string   "address_description"
+    t.float    "address_latitude"
+    t.float    "address_longitude"
+    t.boolean  "have_custom_products"
+    t.integer  "frepi_coins"
+    t.integer  "business_id"
+    t.float    "quota_max"
+    t.float    "current_quota"
+    t.string   "user_group"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
 end

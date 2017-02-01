@@ -82,6 +82,7 @@ GEM
     pg (0.19.0-x86-mingw32)
     puma (3.7.0)
     rack (2.0.1)
+    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (5.0.1)
@@ -155,6 +156,7 @@ DEPENDENCIES
   jquery-rails
   pg (~> 0.18)
   puma (~> 3.0)
+  rack-cors
   rails (~> 5.0.1)
   sass-rails (~> 5.0)
   symmetric-encryption

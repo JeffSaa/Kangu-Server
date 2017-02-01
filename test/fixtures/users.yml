@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type_id: 1
+  email: MyString
+  password: MyString
+  address_description: MyString
+  address_latitude: 
+  address_longitude: 
+  have_custom_products: false
+  frepi_coins: 1
+  business_id: 1
+  quota_max: 1.5
+  current_quota: 1.5
+  user_group: MyString
+
+two:
+  type_id: 1
+  email: MyString
+  password: MyString
+  address_description: MyString
+  address_latitude: 
+  address_longitude: 
+  have_custom_products: false
+  frepi_coins: 1
+  business_id: 1
+  quota_max: 1.5
+  current_quota: 1.5
+  user_group: MyString

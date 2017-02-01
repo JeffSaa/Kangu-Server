@@ -1,4 +1,8 @@
-class WelcomeController < ApplicationController
+class Api::V1::RegisterController < ApplicationController
+
+	def create
+		render :json => {model: "hola"}
+	end
 
 	def index
 		en = SymmetricEncryption.encrypt "Sensitive data"
