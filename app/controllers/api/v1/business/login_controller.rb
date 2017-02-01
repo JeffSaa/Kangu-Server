@@ -10,13 +10,16 @@ class Api::V1::Business::LoginController < ApplicationController
 				if token.save
 					render :json => { model: token.id }, status: :ok
 				else
-					render :json => {model: "Ups..."}, status: :bad_request
+					error = {code: 3}
+					render :json => {model: error}, status: :bad_request
 				end
 			else
-				render :json => {model: "Ups..."}, status: :unauthorized
+				error = {code: 4}
+				render :json => {model: error}, status: :unauthorized
 			end
 		else
-			render :json => {model: "User not found"}, status: :not_found
+			error = {code: 2}
+			render :json => {model: error}, status: :not_found
 		end
 	end
 

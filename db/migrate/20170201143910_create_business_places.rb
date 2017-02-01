@@ -1,6 +1,6 @@
-class CreateBusinesses < ActiveRecord::Migration[5.0]
+class CreateBusinessPlaces < ActiveRecord::Migration[5.0]
   def change
-    create_table :businesses do |t|
+    create_table :business_places do |t|
       t.string :name
       t.string :domain
       t.integer :user_id

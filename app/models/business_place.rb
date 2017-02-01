@@ -1,0 +1,2 @@
+class BusinessPlace < ApplicationRecord
+end

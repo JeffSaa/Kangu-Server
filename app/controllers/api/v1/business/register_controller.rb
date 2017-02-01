@@ -7,7 +7,8 @@ class Api::V1::Business::RegisterController < ApplicationController
 		if user.save
 			render :json => {model: user.email}
 		else
-			render :json => {model: "Ups..."}, status: :bad_request
+			error = {code: 1}
+			render :json => {model: error}, status: :bad_request
 		end
 	end
 
