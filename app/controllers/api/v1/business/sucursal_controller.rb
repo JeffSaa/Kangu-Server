@@ -6,25 +6,18 @@ class Api::V1::Business::BusinessController < ApplicationController
 			user = User.find_by(id: token.user_id)
 			if user
 				type = UserType.find_by(id: user.type_id)
-				if type.can_create_business_place
-					business = BusinessPlace.new(business_params)
-					business.user_id = user.id
-					if business.save
-						render :json => {model: business}
-					else
-						error = {code: 8}
-						render :json => {model: error}, status: :bad_request
-					end
+				if type.can_create_business_sucursal
+
 				else
-					error = {code: 7}
+					error = {code: 11}
 					render :json => {model: error}, status: :unauthorized
 				end
 			else
-				error = {code: 6}
+				error = {code: 10}
 				render :json => {model: error}, status: :unauthorized
 			end
 		else
-			error = {code: 5}
+			error = {code: 9}
 			render :json => {model: error}, status: :unauthorized
 		end
 	end
@@ -32,7 +25,7 @@ class Api::V1::Business::BusinessController < ApplicationController
 	private
 
 	def business_params
-		params.permit(:name, :domain)
+		params.permit(:business_id)
 	end
 
 end

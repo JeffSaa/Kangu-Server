@@ -12,13 +12,6 @@ class Api::V1::Business::RegisterController < ApplicationController
 		end
 	end
 
-	def index
-		en = SymmetricEncryption.encrypt "Sensitive data"
-		de = SymmetricEncryption.decrypt en
-		data = {en: en, de: de}
-		render :json => {model: data}
-	end
-
 	private
 
 	def user_params
