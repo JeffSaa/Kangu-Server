@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   		namespace :business do
   			resources :register, format: :json
   			resources :login, format: :json
+  			resources :business, format: :json
   		end
 
   	end

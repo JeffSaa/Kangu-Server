@@ -10,11 +10,25 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170201133024) do
+ActiveRecord::Schema.define(version: 20170201141237) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "business_sucursals", force: :cascade do |t|
+    t.integer  "business_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "businesses", force: :cascade do |t|
+    t.string   "name"
+    t.string   "domain"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
     t.integer  "user_id"
@@ -39,7 +53,6 @@ ActiveRecord::Schema.define(version: 20170201133024) do
     t.float    "address_longitude"
     t.boolean  "have_custom_products", default: false
     t.integer  "frepi_coins",          default: 0
-    t.integer  "business_id",          default: 0
     t.integer  "quota_max",            default: 0
     t.integer  "current_quota",        default: 0
     t.datetime "created_at",                           null: false
