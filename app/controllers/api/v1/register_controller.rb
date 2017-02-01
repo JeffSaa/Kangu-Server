@@ -3,7 +3,11 @@ class Api::V1::RegisterController < ApplicationController
 	def create
 		user = User.new(user_params)
 		user.password = SymmetricEncryption.encrypt params[:password]
-		render :json => {model: user}
+		if user.save
+			render :json => {model: user}
+		else
+			render :json => {model: "Ups..."}, status: :not_found
+		end
 	end
 
 	def index
