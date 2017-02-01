@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  business_Sw: false
+  business_id: 
+  can_login_business_app: false
+
+two:
+  name: MyString
+  business_Sw: false
+  business_id: 
+  can_login_business_app: false

@@ -1,8 +1,9 @@
-class Api::V1::RegisterController < ApplicationController
+class Api::V1::Business::RegisterController < ApplicationController
 
 	def create
 		user = User.new(user_params)
 		user.password = SymmetricEncryption.encrypt params[:password]
+		user.type_id = 1
 		if user.save
 			render :json => {model: user.email}
 		else
