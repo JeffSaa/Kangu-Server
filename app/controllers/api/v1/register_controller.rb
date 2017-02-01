@@ -4,9 +4,9 @@ class Api::V1::RegisterController < ApplicationController
 		user = User.new(user_params)
 		user.password = SymmetricEncryption.encrypt params[:password]
 		if user.save
-			render :json => {model: user}
+			render :json => {model: user.email}
 		else
-			render :json => {model: "Ups..."}, status: :not_found
+			render :json => {model: "Ups..."}, status: :bad_request
 		end
 	end
 
