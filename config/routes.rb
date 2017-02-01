@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   			resources :register, format: :json
   			resources :login, format: :json
   			resources :business, format: :json
+        resources :sucursal, format: :json
   		end
 
   	end

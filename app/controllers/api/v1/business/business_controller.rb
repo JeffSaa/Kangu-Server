@@ -10,7 +10,7 @@ class Api::V1::Business::BusinessController < ApplicationController
 					business = BusinessPlace.new(business_params)
 					business.user_id = user.id
 					if business.save
-						render :json => {model: business}
+						render :json => {model: business}, status: :ok
 					else
 						error = {code: 8}
 						render :json => {model: error}, status: :bad_request
