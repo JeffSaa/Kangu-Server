@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  group_id: 1
+  entry_price: 1.5
+  natural_price: 1.5
+  business_price: 1.5
+  subcategorie_id: 1
+  disabled: false
+  coin_price: 1
+  discount: 1.5
+  provider_may_id: 1
+  provider_min_id: 1
+  type_size: 1
+  cant_min_may: 1
+  product_count: 1
+
+two:
+  name: MyString
+  group_id: 1
+  entry_price: 1.5
+  natural_price: 1.5
+  business_price: 1.5
+  subcategorie_id: 1
+  disabled: false
+  coin_price: 1
+  discount: 1.5
+  provider_may_id: 1
+  provider_min_id: 1
+  type_size: 1
+  cant_min_may: 1
+  product_count: 1
