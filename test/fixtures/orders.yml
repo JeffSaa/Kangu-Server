@@ -1,0 +1,35 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  status: 1
+  order_type: false
+  isLate: false
+  frepiman_id: 1
+  shopper_id: 1
+  calification: 1.5
+  date: 2017-02-01
+  hour: 2017-02-01 21:56:35
+  paid: 1.5
+  due: 1.5
+  interest: 1.5
+  interest_date_max: 2017-02-01
+  interest_delay_days: 1
+  pay_mode: 1
+
+two:
+  user_id: 1
+  status: 1
+  order_type: false
+  isLate: false
+  frepiman_id: 1
+  shopper_id: 1
+  calification: 1.5
+  date: 2017-02-01
+  hour: 2017-02-01 21:56:35
+  paid: 1.5
+  due: 1.5
+  interest: 1.5
+  interest_date_max: 2017-02-01
+  interest_delay_days: 1
+  pay_mode: 1
