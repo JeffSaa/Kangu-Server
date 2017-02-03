@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170201154707) do
+ActiveRecord::Schema.define(version: 20170203184127) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,69 @@ ActiveRecord::Schema.define(version: 20170201154707) do
     t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "type",         default: 0
+    t.integer  "categorie_id", default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  create_table "order_products", force: :cascade do |t|
+    t.integer  "order_id",    default: 0
+    t.integer  "product_id",  default: 0
+    t.float    "price",       default: 0.0
+    t.integer  "provider_id", default: 0
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer  "user_id",             default: 0
+    t.integer  "status",              default: 0
+    t.integer  "order_type",          default: 0
+    t.boolean  "isLate",              default: false
+    t.integer  "frepiman_id",         default: 0
+    t.integer  "shopper_id",          default: 0
+    t.float    "calification",        default: 0.0
+    t.date     "date"
+    t.time     "hour"
+    t.float    "paid",                default: 0.0
+    t.float    "due",                 default: 0.0
+    t.float    "interest",            default: 0.0
+    t.date     "interest_date_max"
+    t.integer  "interest_delay_days", default: 0
+    t.integer  "pay_mode",            default: 0
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
+
+  create_table "product_groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "type",       default: 0
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "group_id",        default: 0
+    t.float    "entry_price",     default: 0.0
+    t.float    "natural_price",   default: 0.0
+    t.float    "business_price",  default: 0.0
+    t.integer  "subcategorie_id", default: 0
+    t.boolean  "enabled",         default: true
+    t.integer  "coin_price",      default: 0
+    t.float    "discount",        default: 0.0
+    t.integer  "provider_may_id", default: 0
+    t.integer  "provider_min_id", default: 0
+    t.integer  "type_size",       default: 0
+    t.integer  "cant_min_may",    default: 0
+    t.integer  "product_count",   default: 0
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -69,6 +132,9 @@ ActiveRecord::Schema.define(version: 20170201154707) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.integer  "user_group_id",        default: 0
+    t.boolean  "active",               default: false
+    t.string   "name"
+    t.string   "lastname"
   end
 
 end

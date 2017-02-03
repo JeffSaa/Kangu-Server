@@ -11,6 +11,10 @@ Rails.application.routes.draw do
         resources :sucursal, format: :json
   		end
 
+      namespace :sucursal do
+        resources :register, format: :json
+      end
+
   	end
   end
 
