@@ -9,29 +9,23 @@ class Api::V1::Business::LoginController < ApplicationController
 				if type.can_login_app_business
 					token = Token.new(user_id: user.id)
 					if token.save
-						render :json => { model: token.id }, status: :ok
+						render :json => {model: token.id }, status: :ok
 					else
 						error = {code: 3}
-						render :json => {model: error}, status: :bad_request
+						render :json => error, status: :bad_request
 					end
 				else
 					error = {code: 4}
-					render :json => {model: error}, status: :unauthorized
+					render :json => error, status: :unauthorized
 				end
 			else
 				error = {code: 13}
-				render :json => {model: error}, status: :unauthorized
+				render :json => error, status: :unauthorized
 			end
 		else
 			error = {code: 2}
-			render :json => {model: error}, status: :not_found
+			render :json => error, status: :not_found
 		end
-	end
-
-	private
-
-	def user_params
-		params.permit(:email, :password)
 	end
 
 end
