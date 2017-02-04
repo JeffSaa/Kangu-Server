@@ -11,6 +11,14 @@ Rails.application.routes.draw do
         resources :sucursal, format: :json
   		end
 
+      namespace :sucursal do
+        resources :register, format: :json
+      end
+
+      namespace :userapp do
+        resources :logout, format: :json
+      end
+
   	end
   end
 

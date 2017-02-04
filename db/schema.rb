@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170202030112) do
+=======
+ActiveRecord::Schema.define(version: 20170203193832) do
+>>>>>>> business_model
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,6 +136,10 @@ ActiveRecord::Schema.define(version: 20170202030112) do
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
     t.integer  "user_group_id",        default: 0
+    t.boolean  "active",               default: false
+    t.string   "name"
+    t.string   "lastname"
+    t.integer  "sucursal_id",          default: 0
   end
 
 end
