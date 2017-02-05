@@ -1,4 +1,4 @@
 class BusinessPlace < ApplicationRecord
-	validates :name, presence: true
-	validates :domain, presence: true
+	validates :name, presence: true, uniqueness: true
+	validates :domain, presence: true, uniqueness: true
 end

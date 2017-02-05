@@ -1,30 +1,29 @@
 class Api::V1::Business::SucursalController < ApplicationController
 
 	def create
-		token = Token.find_by(id: params[:token])
+		token = Token.find_by(id: request.headers["Authorization"])
 		if token
 			user = User.find_by(id: token.user_id)
 			if user
-				type = UserType.find_by(id: user.type_id)
-				if type.can_create_business_sucursal
+				if user.type_id == 5
 					sucursal = BusinessSucursal.new(business_params)
 					if sucursal.save
-						render :json => {model: sucursal}, status: :ok
+						render :json => {name: sucursal.name}, status: :ok
 					else
-						error = {code: 12}
-						render :json => {model: error}, status: :bad_request
+						error = {code: 13}
+						render :json => error, status: :bad_request
 					end
 				else
-					error = {code: 11}
-					render :json => {model: error}, status: :unauthorized
+					error = {code: 12}
+					render :json => error, status: :bad_request
 				end
 			else
-				error = {code: 10}
-				render :json => {model: error}, status: :unauthorized
+				error = {code: 11}
+				render :json => error, status: :bad_request
 			end
 		else
-			error = {code: 9}
-			render :json => {model: error}, status: :unauthorized
+			error = {code: 10}
+			render :json => error, status: :bad_request
 		end
 	end
 

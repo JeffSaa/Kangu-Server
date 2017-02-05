@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20170202030112) do
-=======
-ActiveRecord::Schema.define(version: 20170203193832) do
->>>>>>> business_model
+ActiveRecord::Schema.define(version: 20170204155158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,14 +29,6 @@ ActiveRecord::Schema.define(version: 20170203193832) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "name"
-  end
-
-  create_table "businesses", force: :cascade do |t|
-    t.string   "name"
-    t.string   "domain"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "categories", force: :cascade do |t|
@@ -114,7 +102,6 @@ ActiveRecord::Schema.define(version: 20170203193832) do
 
   create_table "user_types", force: :cascade do |t|
     t.string   "name"
-    t.integer  "business_id",                  default: 0
     t.boolean  "can_login_app_business",       default: false
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false

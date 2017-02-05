@@ -5,13 +5,13 @@ class Api::V1::Business::LoginController < ApplicationController
 		user = User.find_by(email: params[:email], password: password)
 		if user
 			if user.active
-				type = UserType.find_by(id: user.type_id)
-				if type.can_login_app_business
+				if user.type_id == 5
 					token = Token.new(user_id: user.id)
 					if token.save
-						render :json => {model: token.id }, status: :ok
+						render :json => {token: token.id, user_name: user.name, user_lastname: user.lastname,
+							user_email: user.email, type: 5 }, status: :ok
 					else
-						error = {code: 3}
+						error = {code: 5}
 						render :json => error, status: :bad_request
 					end
 				else
@@ -19,7 +19,7 @@ class Api::V1::Business::LoginController < ApplicationController
 					render :json => error, status: :unauthorized
 				end
 			else
-				error = {code: 13}
+				error = {code: 3}
 				render :json => error, status: :unauthorized
 			end
 		else
