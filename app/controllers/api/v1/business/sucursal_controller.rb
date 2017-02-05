@@ -5,7 +5,7 @@ class Api::V1::Business::SucursalController < ApplicationController
 		if token
 			user = User.find_by(id: token.user_id)
 			if user
-				if user.type_id == 5
+				if user.type_id < 6
 					sucursal = BusinessSucursal.new(business_params)
 					if sucursal.save
 						render :json => {name: sucursal.name}, status: :ok

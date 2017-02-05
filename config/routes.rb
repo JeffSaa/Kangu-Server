@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         resources :logout, format: :json
       end
 
-      namespace :product do
+      namespace :products do
         resources :product, format: :json
       end
 
