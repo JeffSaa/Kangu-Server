@@ -7,19 +7,15 @@ class Api::V1::Sucursal::RegisterController < ApplicationController
 			user.email = params[:email]+"@"+params[:domain]
 			user.password = SymmetricEncryption.encrypt params[:password]
 			if user.save
-				render :json => {model: user.email}
+				render :json => {email: user.email}
 			else
-				error = {code: 15}
-				render :json => {model: error}, status: :bad_request
+				error = {code: 17}
+				render :json => error, status: :bad_request
 			end
 		else
-			error = {code: 14}
-			render :json => {model: error}, status: :bad_request
+			error = {code: 16}
+			render :json => error, status: :bad_request
 		end
-	end
-
-	def index
-		render :json => {model: "error"}
 	end
 
 	private

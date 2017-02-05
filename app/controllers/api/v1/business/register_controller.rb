@@ -8,7 +8,7 @@ class Api::V1::Business::RegisterController < ApplicationController
 			render :json => {model: user.email, type: 5}
 		else
 			error = {code: 1}
-			render :json => {model: error}, status: :bad_request
+			render :json => error, status: :bad_request
 		end
 	end
 

@@ -6,7 +6,6 @@ Rails.application.routes.draw do
 
   		namespace :business do
   			resources :register, format: :json
-  			resources :login, format: :json
   			resources :business, format: :json
         resources :sucursal, format: :json
   		end
@@ -16,7 +15,12 @@ Rails.application.routes.draw do
       end
 
       namespace :userapp do
+        resources :login, format: :json
         resources :logout, format: :json
+      end
+
+      namespace :product do
+        resources :product, format: :json
       end
 
   	end
