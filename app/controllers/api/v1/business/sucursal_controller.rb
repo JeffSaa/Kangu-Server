@@ -1,9 +1,9 @@
 class Api::V1::Business::SucursalController < ApplicationController
+	before_action :validate_authentification_token
 
 	def create
-		token = Token.find_by(id: request.headers["Authorization"])
-		if token
-			user = User.find_by(id: token.user_id)
+		if @token
+			user = User.find_by(id: @token.user_id)
 			if user
 				if user.type_id < 6
 					sucursal = BusinessSucursal.new(business_params)
@@ -21,9 +21,6 @@ class Api::V1::Business::SucursalController < ApplicationController
 				error = {code: 11}
 				render :json => error, status: :bad_request
 			end
-		else
-			error = {code: 10}
-			render :json => error, status: :bad_request
 		end
 	end
 
