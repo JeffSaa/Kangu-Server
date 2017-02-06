@@ -1,16 +1,15 @@
 class Api::V1::Orders::RequestController < ApplicationController
+	before_action :validate_authentification_token
 
 	def create
-		token = Token.find_by(id: request.headers["Authorization"])
-		if token
-			user = User.find_by(id: token.user_id)
-			if user
-				if user.type_id < 9
+		if @token
+			if @user
+				if @user.type_id < 9 && @user.type_id > 5
 					products = params[:products]
 					if products
 						pTotal = []
 						products.each do |p|
-							pTemp = BusinessProduct.new(user_id: user.id, product_id: p[:id], quantity: p[:quantity])
+							pTemp = BusinessProduct.new(user_id: @user.id, product_id: p[:id], quantity: p[:quantity])
 							if pTemp.save
 								pTotal << pTemp
 							end
@@ -29,13 +28,7 @@ class Api::V1::Orders::RequestController < ApplicationController
 					error = {code: 24}
 					render :json => error, status: :bad_request
 				end
-			else
-				error = {code: 23}
-				render :json => error, status: :bad_request
 			end
-		else
-			error = {code: 22}
-			render :json => error, status: :bad_request
 		end
 	end
 

@@ -9,6 +9,12 @@ class ApplicationController < ActionController::Base
   	if not @token 
   		error = {code: 100}
   		render :json => error, status: :bad_request
+    else
+      @user = User.find_by(id: @token.user_id)
+      if not @user
+        error = {code: 101}
+        render :json => error, status: :bad_request
+      end
   	end 	
   end
 

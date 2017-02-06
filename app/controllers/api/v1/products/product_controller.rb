@@ -1,11 +1,10 @@
 class Api::V1::Products::ProductController < ApplicationController
+	before_action :validate_authentification_token
 
 	def create
-		token = Token.find_by(id: request.headers["Authorization"])
-		if token
-			user = User.find_by(id: token.user_id)
-			if user
-				if user.type_id < 4
+		if @token
+			if @user
+				if @user.type_id < 4
 					product = Product.new(product_params)
 					if product.save
 						render :json => product, status: :ok
@@ -17,13 +16,7 @@ class Api::V1::Products::ProductController < ApplicationController
 					error = {code: 20}
 					render :json => error, status: :bad_request
 				end
-			else
-				error = {code: 19}
-				render :json => error, status: :bad_request
 			end
-		else
-			error = {code: 18}
-			render :json => error, status: :bad_request
 		end
 	end
 

@@ -1,13 +1,12 @@
 class Api::V1::Business::BusinessController < ApplicationController
+	before_action :validate_authentification_token
 
 	def create
-		token = Token.find_by(id: request.headers["Authorization"])
-		if token
-			user = User.find_by(id: token.user_id)
-			if user
-				if user.type_id == 5
+		if @token
+			if @user
+				if @user.type_id == 6
 					business = BusinessPlace.new(business_params)
-					business.user_id = user.id
+					business.user_id = @user.id
 					if business.save
 						render :json => {name: business.name, domain: business.domain}, status: :ok
 					else
@@ -18,13 +17,7 @@ class Api::V1::Business::BusinessController < ApplicationController
 					error = {code: 8}
 					render :json => error, status: :bad_request
 				end
-			else
-				error = {code: 7}
-				render :json => error, status: :bad_request
 			end
-		else
-			error = {code: 6}
-			render :json => error, status: :bad_request
 		end
 	end
 
