@@ -4,9 +4,7 @@ class CreateOrderProducts < ActiveRecord::Migration[5.0]
       t.integer :order_id, :default => 0
       t.integer :product_id, :default => 0
       t.float :price, :default => 0
-      t.integer :provider_id, :default => 0 # Asignar a un usuario
-      										# Asignarlo a una lista
-
+      t.integer :provider_id, :default => 0
       t.timestamps
     end
   end
