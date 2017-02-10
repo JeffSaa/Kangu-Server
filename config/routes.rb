@@ -5,27 +5,24 @@ Rails.application.routes.draw do
   	namespace :v1 do
 
   		namespace :business do
-  			resources :user, format: :json
   			resources :business, format: :json
-        resources :sucursal, format: :json
   		end
 
       namespace :sucursal do
-        resources :register, format: :json
         resources :search, format: :json
       end
 
       namespace :userapp do
         resources :login, format: :json
         resources :logout, format: :json
+        post 'business', to: :business, controller: 'register'
+        post 'business_employee', to: :business_employee, controller: 'register'
       end
 
       namespace :products do
-        resources :product, format: :json
       end
 
       namespace :orders do
-        resources :request, format: :json
       end
 
   	end

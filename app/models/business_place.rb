@@ -1,8 +1,8 @@
 class BusinessPlace < ApplicationRecord
 	validates :name, presence: true, uniqueness: true
 
-	def lowercase
-		self.name = name.lowercase
+	def downcase_fields
+		self.name = name.downcase
 	end
 
 end

@@ -1,10 +1,10 @@
-class Api::V1::Business::SucursalController < ApplicationController
+class Api::V1::Sucursal::SucursalController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create
 		if @token
 			if @user
-				if @user.type_id < 6
+				if @user.type_id == 301
 					sucursal = BusinessSucursal.new(business_params)
 					if sucursal.save
 						render :json => {name: sucursal.name}, status: :ok
@@ -23,7 +23,7 @@ class Api::V1::Business::SucursalController < ApplicationController
 	private
 
 	def business_params
-		params.permit(:business_id, :name)
+		params.permit(:business_id, :name, :phone, :address_description, :address_longitude, :address_latitude)
 	end
 
 end
