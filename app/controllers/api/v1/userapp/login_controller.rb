@@ -23,4 +23,6 @@ class Api::V1::Userapp::LoginController < ApplicationController
 		end
 	end
 
+	private
+
 end

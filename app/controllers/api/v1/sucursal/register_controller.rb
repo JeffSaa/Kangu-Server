@@ -4,7 +4,6 @@ class Api::V1::Sucursal::RegisterController < ApplicationController
 		business = BusinessPlace.find_by(domain: params[:domain])
 		if business
 			user = User.new(register_params)
-			user.email = params[:email]+"@"+params[:domain]
 			user.password = SymmetricEncryption.encrypt params[:password]
 			if user.save
 				render :json => {email: user.email}
@@ -21,7 +20,7 @@ class Api::V1::Sucursal::RegisterController < ApplicationController
 	private
 
 	def register_params
-		params.permit(:name, :lastname, :sucursal_id)
+		params.permit(:name, :email, :name, :lastname, :sucursal_id)
 	end
 
 end

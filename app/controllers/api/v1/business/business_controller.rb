@@ -4,11 +4,12 @@ class Api::V1::Business::BusinessController < ApplicationController
 	def create
 		if @token
 			if @user
-				if @user.type_id == 6
+				if @user.type_id == 301
 					business = BusinessPlace.new(business_params)
 					business.user_id = @user.id
-					if business.save
-						render :json => {name: business.name, domain: business.domain}, status: :ok
+					if business
+						upload_blob("sucursalphotos", params[:photo])
+						render :json => {name: business.name}, status: :ok
 					else
 						error = {code: 9}
 						render :json => error, status: :bad_request
@@ -24,7 +25,7 @@ class Api::V1::Business::BusinessController < ApplicationController
 	private
 
 	def business_params
-		params.permit(:name, :domain)
+		params.permit(:name, :photo)
 	end
 
 end

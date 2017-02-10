@@ -5,13 +5,14 @@ Rails.application.routes.draw do
   	namespace :v1 do
 
   		namespace :business do
-  			resources :register, format: :json
+  			resources :user, format: :json
   			resources :business, format: :json
         resources :sucursal, format: :json
   		end
 
       namespace :sucursal do
         resources :register, format: :json
+        resources :search, format: :json
       end
 
       namespace :userapp do

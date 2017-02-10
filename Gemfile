@@ -18,6 +18,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'symmetric-encryption'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'azure-storage'
+gem 'activerecord-deprecated_finders'
 
 group :development, :test do
   gem 'byebug', platform: :mri
