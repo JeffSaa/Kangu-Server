@@ -9,7 +9,8 @@ Rails.application.routes.draw do
   		end
 
       namespace :sucursal do
-        resources :search, format: :json
+        resources :sucursal, format: :json
+        post 'get_user_request', to: :get_user_request, controller: 'sucursal'
       end
 
       namespace :userapp do

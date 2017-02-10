@@ -1,5 +1,5 @@
 class Api::V1::Sucursal::SucursalController < ApplicationController
-	before_action :validate_authentification_token
+	before_action :validate_authentification_token, :except => [:get_user_request]
 
 	def create
 		if @token
@@ -18,6 +18,11 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 				end
 			end
 		end
+	end
+
+	def get_user_request
+		requests = User.where(active: false, sucursal_id: params[:sucursal_id])
+		render :json => requests, status: :ok
 	end
 
 	private
