@@ -1,11 +1,12 @@
 class Api::V1::Sucursal::SucursalController < ApplicationController
-	before_action :validate_authentification_token, :except => [:get_user_request]
+	before_action :validate_authentification_token, :except => [:get_user_request, :search_sucursal]
 
 	def create
 		if @token
 			if @user
 				if @user.type_id == 301
 					sucursal = BusinessSucursal.new(business_params)
+					sucursal.downcase_fields
 					if sucursal.save
 						render :json => {name: sucursal.name}, status: :ok
 					else
@@ -54,6 +55,12 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 			error = {code: 16}
 			render :json => error, status: :bad_request
 		end
+	end
+
+	def search_sucursal
+		q = params[:search].downcase
+		respond = BusinessSucursal.where("name like '#{q}%'")
+		render :json => {model: respond}, status: :ok
 	end
 
 	private

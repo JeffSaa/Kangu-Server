@@ -9,7 +9,9 @@ class Api::V1::Business::BusinessController < ApplicationController
 					business.user_id = @user.id
 					business.downcase_fields
 					if business.save
-						upload_blob("sucursalphotos", params[:photo], business.id)
+						if params.has_key?(:photo)
+							upload_blob("businessplacephotos", params[:photo], business.id)
+						end
 						render :json => {name: business.name}, status: :ok
 					else
 						error = {code: 9}
