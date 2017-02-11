@@ -25,6 +25,37 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 		render :json => requests, status: :ok
 	end
 
+	def accept_user_request
+		empl = User.find_by(id: params[:user_id])
+		if empl
+			if params[:type_id].to_i > 301 && params[:type_id].to_i < 305
+				if params.has_key?(:sucursal_id)
+					sucursal = BusinessSucursal.find_by(id: params[:sucursal_id])
+					business = BusinessPlace.find_by(id: sucursal.business_id)
+					if business.user_id == @user.id
+						empl.update(active: true, sucursal_id: sucursal.id, type_id: params[:type_id])
+						render :json => empl, status: :ok
+					else
+						error = {code: 19}
+						render :json => error, status: :bad_request
+					end
+				elsif @user.sucursal_id == empl.sucursal_id
+					empl.update(active: true, type_id: params[:type_id])
+					render :json => empl, status: :ok
+				else
+					error = {code: 18}
+					render :json => error, status: :bad_request
+				end
+			else
+				error = {code: 17}
+				render :json => error, status: :bad_request
+			end
+		else
+			error = {code: 16}
+			render :json => error, status: :bad_request
+		end
+	end
+
 	private
 
 	def business_params
