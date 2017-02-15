@@ -23,9 +23,14 @@ Rails.application.routes.draw do
       end
 
       namespace :products do
+        resources :products, format: :json
       end
 
       namespace :orders do
+      end
+
+      namespace :categories do
+        resources :categories, format: :json
       end
 
   	end

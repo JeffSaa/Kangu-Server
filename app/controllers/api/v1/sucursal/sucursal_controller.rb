@@ -22,8 +22,8 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 	end
 
 	def get_user_request
-		requests = User.where(active: false, sucursal_id: params[:sucursal_id])
-		render :json => requests, status: :ok
+		request = User.where(active: false, sucursal_id: params[:sucursal_id])
+		render :json => {model: request}, status: :ok
 	end
 
 	def accept_user_request
@@ -31,15 +31,7 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 		if empl
 			if params[:type_id].to_i > 301 && params[:type_id].to_i < 305
 				if params.has_key?(:sucursal_id)
-					sucursal = BusinessSucursal.find_by(id: params[:sucursal_id])
-					business = BusinessPlace.find_by(id: sucursal.business_id)
-					if business.user_id == @user.id
-						empl.update(active: true, sucursal_id: sucursal.id, type_id: params[:type_id])
-						render :json => empl, status: :ok
-					else
-						error = {code: 19}
-						render :json => error, status: :bad_request
-					end
+					prueba = user_belong_to_sucursal(@user.id, params[:sucursal_id])
 				elsif @user.sucursal_id == empl.sucursal_id
 					empl.update(active: true, type_id: params[:type_id])
 					render :json => empl, status: :ok
@@ -61,6 +53,9 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 		q = params[:search].downcase
 		respond = BusinessSucursal.where("name like '#{q}%'")
 		render :json => {model: respond}, status: :ok
+	end
+
+	def delete_user
 	end
 
 	private

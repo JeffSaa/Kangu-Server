@@ -14,6 +14,19 @@ class ApplicationController < ActionController::Base
     blobs.create_block_blob(container.name, id.to_s, content)
   end
 
+  def user_belong_to_sucursal(user_id, sucursal_id)
+    user = User.find_by(id: user_id)
+    sucursal = BusinessSucursal.find_by(id: sucursal_id)
+    if user && sucursal
+      business = BusinessPlace.find_by(id: sucursal.business_id)
+      render :json => business, status: :ok
+    else
+      error = {code: 102}
+      render :json => error, status: :bad_request
+    end
+    return false
+  end
+
   private 
 
   def validate_authentification_token

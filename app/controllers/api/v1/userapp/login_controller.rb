@@ -8,7 +8,8 @@ class Api::V1::Userapp::LoginController < ApplicationController
 				token = Token.new(user_id: user.id)
 				if token.save
 					render :json => {token: token.id, user_name: user.name, user_lastname: user.lastname,
-						user_email: user.email, type: user.type_id}, status: :ok
+						user_email: user.email, type: user.type_id, sucursal: user.sucursal_id,
+						phone: user.phone}, status: :ok
 				else
 					error = {code: 4}
 					render :json => error, status: :bad_request
