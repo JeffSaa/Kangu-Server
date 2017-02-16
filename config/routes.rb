@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       namespace :userapp do
         resources :login, format: :json
         resources :logout, format: :json
+        post 'provider', to: :provider, controller: 'register'
         post 'business', to: :business, controller: 'register'
         post 'business_employee', to: :business_employee, controller: 'register'
       end
@@ -27,10 +28,16 @@ Rails.application.routes.draw do
       end
 
       namespace :orders do
+        resources :business, format: :json
       end
 
       namespace :categories do
         resources :categories, format: :json
+        post 'searchsub', to: :searchsub, controller: 'categories'
+      end
+
+      namespace :providers do
+        post 'search', to: :search, controller: 'provider'
       end
 
   	end

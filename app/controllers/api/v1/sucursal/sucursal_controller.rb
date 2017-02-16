@@ -29,20 +29,8 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 	def accept_user_request
 		empl = User.find_by(id: params[:user_id])
 		if empl
-			if params[:type_id].to_i > 301 && params[:type_id].to_i < 305
-				if params.has_key?(:sucursal_id)
-					prueba = user_belong_to_sucursal(@user.id, params[:sucursal_id])
-				elsif @user.sucursal_id == empl.sucursal_id
-					empl.update(active: true, type_id: params[:type_id])
-					render :json => empl, status: :ok
-				else
-					error = {code: 18}
-					render :json => error, status: :bad_request
-				end
-			else
-				error = {code: 17}
-				render :json => error, status: :bad_request
-			end
+			empl.update(active: true, type_id: params[:type_id])
+			render :json => empl, status: :ok
 		else
 			error = {code: 16}
 			render :json => error, status: :bad_request

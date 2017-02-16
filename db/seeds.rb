@@ -20,4 +20,7 @@ UserType.create(name: "BusinessJefeCocina")	#303
 UserType.create(name: "BusinessOperator")	#304
 
 
-UserType.create(name: "HomeUser")			#400
+UserType.create(name: "Provider")			#401
+
+
+UserType.create(name: "HomeUser")			#501
