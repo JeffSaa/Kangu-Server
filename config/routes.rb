@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   		namespace :business do
   			resources :business, format: :json
+        post 'search_business', to: :search_business, controller: 'business'
   		end
 
       namespace :sucursal do

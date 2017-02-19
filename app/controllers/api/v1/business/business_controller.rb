@@ -25,6 +25,12 @@ class Api::V1::Business::BusinessController < ApplicationController
 		end
 	end
 
+	def search_business
+		q = params[:search].downcase
+		respond = BusinessPlace.where("name like '#{q}%'")
+		render :json => {model: respond}, status: :ok
+	end
+
 	private
 
 	def business_params

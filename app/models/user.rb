@@ -10,7 +10,7 @@ class User < ApplicationRecord
 		self.name = self.name.downcase
 		self.lastname = self.lastname.downcase
 		self.email = self.email.downcase
-		self.address_description = self.address_description.downcase
+		#self.address_description = self.address_description.downcase
 	end
 
 end
