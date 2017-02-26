@@ -8,7 +8,7 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 					sucursal = BusinessSucursal.new(business_params)
 					sucursal.downcase_fields
 					if sucursal.save
-						render :json => {name: sucursal.name}, status: :ok
+						render :json => {name: sucursal}, status: :ok
 					else
 						error = {code: 13}
 						render :json => error, status: :bad_request
@@ -40,6 +40,11 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 	def search_sucursal
 		q = params[:search].downcase
 		respond = BusinessSucursal.where("name like '#{q}%'")
+		render :json => {model: respond}, status: :ok
+	end
+
+	def get_all_sucursal_ofplace
+		respond = BusinessSucursal.where(business_id: params[:id])
 		render :json => {model: respond}, status: :ok
 	end
 

@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   		namespace :business do
   			resources :business, format: :json
         post 'search_business', to: :search_business, controller: 'business'
+        post 'all_my_business', to: :all_my_business, controller: 'business'
   		end
 
       namespace :sucursal do
@@ -14,6 +15,7 @@ Rails.application.routes.draw do
         post 'get_user_request', to: :get_user_request, controller: 'sucursal'
         post 'accept_user_request', to: :accept_user_request, controller: 'sucursal'
         post 'search_sucursal', to: :search_sucursal, controller: 'sucursal'
+        post 'get_all_sucursal_ofplace', to: :get_all_sucursal_ofplace, controller: 'sucursal'
       end
 
       namespace :userapp do

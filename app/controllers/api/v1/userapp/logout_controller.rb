@@ -1,9 +1,10 @@
 class Api::V1::Userapp::LogoutController < ApplicationController
 
 	def destroy
-		if @token
-			if @token.destroy
-				render :json => { model: @token.id }
+		token = Token.find_by(id: params[:id])
+		if token
+			if token.destroy
+				render :json => { model: token }, status: :ok
 			else
 				error = {code: 15}
 				render :json => {model: error}, status: :bad_request
