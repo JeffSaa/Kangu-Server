@@ -19,6 +19,7 @@ gem 'symmetric-encryption'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'azure-storage'
 gem 'activerecord-deprecated_finders'
+gem 'will_paginate'
 
 group :development, :test do
   gem 'byebug', platform: :mri

@@ -13,8 +13,10 @@ class Api::V1::Categories::CategoriesController < ApplicationController
 	end
 
 	def show
-		products = Product.where(subcategorie_id: params[:id])
-		render :json => products, status: :ok
+		products = Product.where(subcategorie_id: params[:id]).paginate(:per_page => Constants::PRODUCT_PER_PAGE,
+			:page => params[:page])
+		set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
+		render :json => {model: products}, status: :ok
 	end
 
 	def searchsub
