@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       namespace :categories do
         resources :categories, format: :json
         post 'searchsub', to: :searchsub, controller: 'categories'
+        post 'get_all_cat_and_subcat', to: :get_all_cat_and_subcat, controller: 'categories'
       end
 
       namespace :providers do
