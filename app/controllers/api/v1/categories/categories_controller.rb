@@ -1,5 +1,6 @@
 class Api::V1::Categories::CategoriesController < ApplicationController
-	before_action :validate_authentification_token, :except => [:create, :searchsub, :get_all_cat_and_subcat]
+	before_action :validate_authentification_token, :except => [:create, :searchsub, :get_all_cat_and_subcat,
+		:show]
 
 	def create
 		categorie = Categorie.new(categorie_params)
@@ -9,6 +10,11 @@ class Api::V1::Categories::CategoriesController < ApplicationController
 		else
 			render :json => categorie, status: :bad_request
 		end
+	end
+
+	def show
+		products = Product.where(subcategorie_id: params[:id])
+		render :json => products, status: :ok
 	end
 
 	def searchsub

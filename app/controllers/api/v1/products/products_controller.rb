@@ -4,8 +4,8 @@ class Api::V1::Products::ProductsController < ApplicationController
 		if not @user
 			product = Product.new(products_params)
 			product.downcase_fields
-			if product
-				upload_blob("productsphotos", params[:photo], 1)
+			if product.save
+				upload_blob("productsphotos", params[:photo], product.id)
 				render :json => product, status: :ok
 			end
 		end
