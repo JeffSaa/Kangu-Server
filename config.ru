@@ -12,7 +12,7 @@ use Rack::Cors do
     resource '/file/at/*',
         :methods => [:get, :post, :delete, :put, :patch, :options, :head],
         :headers => 'x-domain-token',
-        :expose  => ['Some-Custom-Response-Header'],
+        :expose  => [''],
         :max_age => 600
         # headers to expose
   end

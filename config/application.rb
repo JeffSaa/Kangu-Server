@@ -9,7 +9,10 @@ module FrepiServer
   	 config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :delete, :options]
+        resource '*',
+        :headers => :any,
+        :expose  => ['current_page', 'pages_count', 'products_per_page', 'total_entries'],
+        :methods => [:get, :post, :delete, :options]
       end
     end
   end
