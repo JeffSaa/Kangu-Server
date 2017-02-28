@@ -1,6 +1,6 @@
 class Api::V1::Categories::CategoriesController < ApplicationController
 	before_action :validate_authentification_token, :except => [:create, :searchsub, :get_all_cat_and_subcat,
-		:show]
+		:show, :get_main_categories]
 
 	def create
 		categorie = Categorie.new(categorie_params)
@@ -32,6 +32,12 @@ class Api::V1::Categories::CategoriesController < ApplicationController
 			subcategorie = Categorie.where(categorie_id: c.id,categorie_type: 1)
 			response << {categorie: c, subcategories: subcategorie}
 		end
+		render :json => response, status: :ok
+	end
+
+	def get_main_categories
+		products = Product.all.first(5)
+		response = {top_popular: products, recent_added: products, you_interest: products}
 		render :json => response, status: :ok
 	end
 

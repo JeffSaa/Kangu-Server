@@ -39,13 +39,13 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 
 	def search_sucursal
 		q = params[:search].downcase
-		respond = BusinessSucursal.where("name like '#{q}%'")
-		render :json => {model: respond}, status: :ok
+		response = BusinessSucursal.where("name like '#{q}%'")
+		render :json => {model: response}, status: :ok
 	end
 
 	def get_all_sucursal_ofplace
-		respond = BusinessSucursal.where(business_id: params[:id])
-		render :json => {model: respond}, status: :ok
+		response = BusinessSucursal.where(business_id: params[:id])
+		render :json => {model: response}, status: :ok
 	end
 
 	def delete_user

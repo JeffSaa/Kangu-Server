@@ -1,4 +1,5 @@
 class Api::V1::Products::ProductsController < ApplicationController
+	before_action :validate_authentification_token, :except => [:search_product]
 
 	def create
 		if not @user
@@ -9,6 +10,12 @@ class Api::V1::Products::ProductsController < ApplicationController
 				render :json => product, status: :ok
 			end
 		end
+	end
+
+	def search_product
+		q = params[:search].downcase
+		response = Product.where("name like '#{q}%'")
+		render :json => {model: response}, status: :ok
 	end
 
 	private
