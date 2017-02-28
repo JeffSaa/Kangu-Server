@@ -1,6 +1,6 @@
 class Api::V1::Categories::CategoriesController < ApplicationController
 	before_action :validate_authentification_token, :except => [:create, :searchsub, :get_all_cat_and_subcat,
-		:show, :get_main_categories]
+		:show, :get_main_categories, :get_products_categories]
 
 	def create
 		categorie = Categorie.new(categorie_params)
@@ -13,6 +13,13 @@ class Api::V1::Categories::CategoriesController < ApplicationController
 	end
 
 	def show
+		products = Product.where(subcategorie_id: params[:id]).paginate(:per_page => Constants::PRODUCT_PER_PAGE,
+			:page => params[:page])
+		set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
+		render :json => {model: products}, status: :ok
+	end
+
+	def get_products_categories
 		products = Product.where(subcategorie_id: params[:id]).paginate(:per_page => Constants::PRODUCT_PER_PAGE,
 			:page => params[:page])
 		set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
