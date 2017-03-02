@@ -14,8 +14,10 @@ class Api::V1::Products::ProductsController < ApplicationController
 
 	def search_product
 		q = params[:search].downcase
-		response = Product.where("name like '#{q}%'")
-		render :json => {model: response}, status: :ok
+		products = Product.where("name like '#{q}%'").paginate(:per_page => Constants::PRODUCT_PER_PAGE,
+			:page => params[:page])
+		set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
+		render :json => {model: products}, status: :ok
 	end
 
 	private
