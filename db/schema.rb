@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302005552) do
+ActiveRecord::Schema.define(version: 20170303230646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,11 +105,11 @@ ActiveRecord::Schema.define(version: 20170302005552) do
     t.integer  "type_size",           default: 0
     t.integer  "cant_min_may",        default: 0
     t.integer  "product_count",       default: 0
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.integer  "type_measure"
     t.string   "measure_description"
-    t.uuid     "uid"
+    t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
   end
 
   create_table "tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
@@ -138,15 +138,15 @@ ActiveRecord::Schema.define(version: 20170302005552) do
     t.integer  "frepi_coins",          default: 0
     t.integer  "quota_max",            default: 0
     t.integer  "current_quota",        default: 0
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                                                 null: false
+    t.datetime "updated_at",                                                 null: false
     t.integer  "user_group_id",        default: 0
     t.boolean  "active",               default: false
     t.string   "name"
     t.string   "lastname"
     t.integer  "sucursal_id",          default: 0
     t.integer  "phone"
-    t.uuid     "uuid"
+    t.uuid     "uuid",                 default: -> { "uuid_generate_v4()" }
   end
 
 end
