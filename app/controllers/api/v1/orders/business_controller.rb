@@ -8,7 +8,7 @@ class Api::V1::Orders::BusinessController < ApplicationController
 			products.each do |p|
 				business_product = BusinessProduct.new(quantity: p[:quantity], product_id: p[:product_id],
 					type_measure: p[:type_measure], user_id: @user.id)
-				if business_product.save
+				if business_product
 					list << business_product
 				end
 			end
