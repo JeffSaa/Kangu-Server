@@ -33,6 +33,10 @@ Rails.application.routes.draw do
 
 			namespace :orders do
 				resources :business, format: :json
+				post 'business_order_product', to: :business_order_product, controller: 'business'
+				post 'get_business_order_product', to: :get_business_order_product, controller: 'business'
+				post 'accept_business_order_product', to: :accept_business_order_product, controller: 'business'
+				post 'del_business_order_product', to: :del_business_order_product, controller: 'business'
 			end
 
 			namespace :categories do
