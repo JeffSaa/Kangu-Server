@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170304004847) do
+ActiveRecord::Schema.define(version: 20170305232942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20170304004847) do
     t.datetime "updated_at",   null: false
     t.integer  "product_id"
     t.integer  "type_measure"
+    t.string   "comment"
   end
 
   create_table "business_sucursals", force: :cascade do |t|
@@ -81,6 +82,7 @@ ActiveRecord::Schema.define(version: 20170304004847) do
     t.integer  "pay_mode",            default: 0
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.string   "comment"
   end
 
   create_table "product_groups", force: :cascade do |t|

@@ -34,6 +34,10 @@ class ApplicationController < ActionController::Base
     self.headers['total_entries'] = model.total_entries
   end
 
+  def get_product_price(p)
+    return (p[:product_info][:entry_price] + p[:product_info][:entry_price] * p[:product_info][:business_price] / 100) * p[:product][:quantity]
+  end
+
   private 
 
   def validate_authentification_token
