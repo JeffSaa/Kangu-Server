@@ -91,8 +91,11 @@ class Api::V1::Orders::BusinessController < ApplicationController
 					order_product.quantity = p[:product][:quantity]
 					order_product.measure_type = p[:product][:type_measure]
 					order_product.order_id = order.id
+					BusinessProduct.find_by(id: p[:product][:id]).destroy
 					if order_product.save
 						productos << order_product
+						total = order.due + order_product.price * order_product.quantity
+						order.update(due: total)
 					end
 				end
 				render :json => order, status: :ok
@@ -108,7 +111,7 @@ class Api::V1::Orders::BusinessController < ApplicationController
 
 	def get_orders_sucursal
 		if @user
-			orders = Order.where(user_id: @user.sucursal_id, status: 0)
+			orders = Order.where(user_id: @user.sucursal_id).order(:status)
 			render :json => orders, status: :ok
 		end
 	end

@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_product_price(p)
-    return (p[:product_info][:entry_price] + p[:product_info][:entry_price] * p[:product_info][:business_price] / 100) * p[:product][:quantity]
+    return p[:product_info][:entry_price] + p[:product_info][:entry_price] * p[:product_info][:business_price] / 100
   end
 
   private 
