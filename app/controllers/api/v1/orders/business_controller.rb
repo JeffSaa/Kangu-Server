@@ -111,8 +111,31 @@ class Api::V1::Orders::BusinessController < ApplicationController
 
 	def get_orders_sucursal
 		if @user
-			orders = Order.where(user_id: @user.sucursal_id).order(:status)
-			render :json => orders, status: :ok
+			case @user.type_id
+			when 301
+				places = BusinessPlace.where(user_id: @user.id)
+				response = []
+				places.each do |p|
+					sucursals = BusinessSucursal.where(business_id: p.id)
+					sucursals.each do |s|
+						orders = Order.where(user_id: s.id).order(:status)
+						orders.each do |o|
+							temp = {sucursal: s, order: o}
+							response << temp
+						end
+					end
+				end
+				render :json => response, status: :ok
+			else
+				orders = Order.where(user_id: @user.sucursal_id).order(:status)
+				response = []
+				sucursal = BusinessSucursal.find_by(id: @user.sucursal_id)
+				orders.each do |o|
+					temp = {sucursal: sucursal, order: o}
+					response << temp
+				end
+				render :json => response, status: :ok
+			end
 		end
 	end
 
