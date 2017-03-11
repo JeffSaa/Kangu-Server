@@ -7,7 +7,9 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
-				temp[:products] << Product.find_by(id: p.product_id)
+				temp_product = Product.find_by(id: p.product_id)
+				temp_product.measure_description = p.quantity
+				temp[:products] << temp_product
 			end
 			response[:received] << temp
 		end
@@ -15,7 +17,9 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
-				temp[:products] << Product.find_by(id: p.product_id)
+				temp_product = Product.find_by(id: p.product_id)
+				temp_product.measure_description = p.quantity
+				temp[:products] << temp_product
 			end
 			response[:buying] << temp
 		end
@@ -23,7 +27,9 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
-				temp[:products] << Product.find_by(id: p.product_id)
+				temp_product = Product.find_by(id: p.product_id)
+				temp_product.measure_description = p.quantity
+				temp[:products] << temp_product
 			end
 			response[:deliver] << temp
 		end
@@ -31,7 +37,9 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
-				temp[:products] << Product.find_by(id: p.product_id)
+				temp_product = Product.find_by(id: p.product_id)
+				temp_product.measure_description = p.quantity
+				temp[:products] << temp_product
 			end
 			response[:completed] << temp
 		end
@@ -39,7 +47,9 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
-				temp[:products] << Product.find_by(id: p.product_id)
+				temp_product = Product.find_by(id: p.product_id)
+				temp_product.measure_description = p.quantity
+				temp[:products] << temp_product
 			end
 			response[:disabled] << temp
 		end
