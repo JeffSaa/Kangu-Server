@@ -3,8 +3,8 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: localhost
-  username: frepi_pg
-  password: Frepi_pg7
+  username: jeff
+  password: jeff
 
 development:
   <<: *default
@@ -17,5 +17,5 @@ test:
 production:
   <<: *default
   database: Frepi_production
-  username: frepi_pg
-  password: Frepi_pg7
+  username: jeff
+  password: jeff

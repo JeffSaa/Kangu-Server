@@ -13,6 +13,32 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 		end
 	end
 
+	def supervisor
+		user = User.new(user_params)
+		user.password = SymmetricEncryption.encrypt params[:password]
+		user.type_id = 102
+		user.downcase_fields
+		if user.save
+			render :json => user, status: :ok
+		else
+			error = {code: 123}
+			render :json => error, status: :bad_request
+		end
+	end
+
+	def administrator
+		user = User.new(user_params)
+		user.password = SymmetricEncryption.encrypt params[:password]
+		user.type_id = 101
+		user.downcase_fields
+		if user.save
+			render :json => user, status: :ok
+		else
+			error = {code: 123}
+			render :json => error, status: :bad_request
+		end
+	end
+
 	def business
 		user = User.new(user_params)
 		user.password = SymmetricEncryption.encrypt params[:password]

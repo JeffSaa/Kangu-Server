@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 				post 'provider', to: :provider, controller: 'register'
 				post 'business', to: :business, controller: 'register'
 				post 'business_employee', to: :business_employee, controller: 'register'
+				post 'supervisor', to: :supervisor, controller: 'register'
+				post 'administrator', to: :administrator, controller: 'register'
 			end
 
 			namespace :products do
@@ -38,6 +40,8 @@ Rails.application.routes.draw do
 				post 'accept_business_order_product', to: :accept_business_order_product, controller: 'business'
 				post 'del_business_order_product', to: :del_business_order_product, controller: 'business'
 				post 'get_orders_sucursal', to: :get_orders_sucursal, controller: 'business'
+				post 'get_supervisor_orders', to: :get_supervisor_orders, controller: 'supervisor'
+				post 'change_order_status', to: :change_order_status, controller: 'supervisor'
 			end
 
 			namespace :categories do

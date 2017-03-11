@@ -7,43 +7,9 @@ class Api::V1::Orders::BusinessController < ApplicationController
 			list = []
 			products.each do |p|
 				business_product = BusinessProduct.new(quantity: p[:quantity], product_id: p[:id],
-					type_measure: p[:type_measure], user_id: @user.id, comment: p[:comment])
+					user_id: @user.id, comment: p[:comment])
 				product = Product.find_by(id: business_product.product_id)
-				k = 0;
-				case product.type_size
-				when 1
-					case business_product[:type_measure]
-					when 1
-						k = 1
-					when 2
-						k = 0.5
-					when 3
-						k = 0.001
-					end
-					case product.type_measure
-					when 1
-						l = 1
-					when 2
-						l = 2
-					when 3
-						l = 1000
-					end
-				when 2
-					case business_product[:type_measure]
-					when 1
-						k = 1
-					when 2
-						k = 0.001
-					end
-					case product.type_measure
-					when 1
-						l = 1
-					when 2
-						l = 1000
-					end
-				end
 				if business_product.save
-					business_product[:quantity] = business_product[:quantity] * k * l;
 					list << business_product
 				end
 			end
@@ -89,7 +55,6 @@ class Api::V1::Orders::BusinessController < ApplicationController
 					order_product.user_id = @user.id
 					order_product.comment = p[:product][:comment]
 					order_product.quantity = p[:product][:quantity]
-					order_product.measure_type = p[:product][:type_measure]
 					order_product.order_id = order.id
 					BusinessProduct.find_by(id: p[:product][:id]).destroy
 					if order_product.save
