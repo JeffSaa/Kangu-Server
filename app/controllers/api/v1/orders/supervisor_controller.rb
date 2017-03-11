@@ -7,9 +7,12 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
+				temp_response = {name: "", quantity: p.quantity, comment: p.comment, type_size: 0, type_measure: 0}
 				temp_product = Product.find_by(id: p.product_id)
-				temp_product.measure_description = p.quantity
-				temp[:products] << temp_product
+				temp_response[:name] = temp_product.name
+				temp_response[:type_size] = temp_product.type_size
+				temp_response[:type_measure] = temp_product.type_measure
+				temp[:products] << temp_response
 			end
 			response[:received] << temp
 		end
@@ -17,9 +20,12 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
+				temp_response = {name: "", quantity: p.quantity, comment: p.comment, type_size: 0, type_measure: 0}
 				temp_product = Product.find_by(id: p.product_id)
-				temp_product.measure_description = p.quantity
-				temp[:products] << temp_product
+				temp_response[:name] = temp_product.name
+				temp_response[:type_size] = temp_product.type_size
+				temp_response[:type_measure] = temp_product.type_measure
+				temp[:products] << temp_response
 			end
 			response[:buying] << temp
 		end
@@ -27,9 +33,12 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
+				temp_response = {name: "", quantity: p.quantity, comment: p.comment, type_size: 0, type_measure: 0}
 				temp_product = Product.find_by(id: p.product_id)
-				temp_product.measure_description = p.quantity
-				temp[:products] << temp_product
+				temp_response[:name] = temp_product.name
+				temp_response[:type_size] = temp_product.type_size
+				temp_response[:type_measure] = temp_product.type_measure
+				temp[:products] << temp_response
 			end
 			response[:deliver] << temp
 		end
@@ -37,9 +46,12 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
+				temp_response = {name: "", quantity: p.quantity, comment: p.comment, type_size: 0, type_measure: 0}
 				temp_product = Product.find_by(id: p.product_id)
-				temp_product.measure_description = p.quantity
-				temp[:products] << temp_product
+				temp_response[:name] = temp_product.name
+				temp_response[:type_size] = temp_product.type_size
+				temp_response[:type_measure] = temp_product.type_measure
+				temp[:products] << temp_response
 			end
 			response[:completed] << temp
 		end
@@ -47,9 +59,12 @@ class Api::V1::Orders::SupervisorController < ApplicationController
 			orderproduct = OrderProduct.where(order_id: o.id);
 			temp = {info: o, products: []}
 			orderproduct.each do |p|
+				temp_response = {name: "", quantity: p.quantity, comment: p.comment, type_size: 0, type_measure: 0}
 				temp_product = Product.find_by(id: p.product_id)
-				temp_product.measure_description = p.quantity
-				temp[:products] << temp_product
+				temp_response[:name] = temp_product.name
+				temp_response[:type_size] = temp_product.type_size
+				temp_response[:type_measure] = temp_product.type_measure
+				temp[:products] << temp_response
 			end
 			response[:disabled] << temp
 		end
