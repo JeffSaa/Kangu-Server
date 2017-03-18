@@ -1,10 +1,7 @@
 class Api::V1::Userapp::RegisterController < ApplicationController
 
 	def provider
-		user = User.new(user_params)
-		user.password = SymmetricEncryption.encrypt params[:password]
-		user.type_id = 401
-		user.downcase_fields
+		user = create_user(401)
 		if user.save
 			render :json => user, status: :ok
 		else
@@ -14,10 +11,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	end
 
 	def supervisor
-		user = User.new(user_params)
-		user.password = SymmetricEncryption.encrypt params[:password]
-		user.type_id = 102
-		user.downcase_fields
+		user = create_user(102)
 		if user.save
 			render :json => user, status: :ok
 		else
@@ -27,10 +21,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	end
 
 	def administrator
-		user = User.new(user_params)
-		user.password = SymmetricEncryption.encrypt params[:password]
-		user.type_id = 101
-		user.downcase_fields
+		user = create_user(101)
 		if user.save
 			render :json => user, status: :ok
 		else
@@ -40,12 +31,9 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	end
 
 	def business
-		user = User.new(user_params)
-		user.password = SymmetricEncryption.encrypt params[:password]
-		user.type_id = 301
-		user.downcase_fields
+		user = create_user(301)
 		if user.save
-			render :json => {email: user.email, name: user.name, lastname: user.lastname, type: user.type_id}
+			render :json => user, status: :ok
 		else
 			error = {code: 1}
 			render :json => error, status: :bad_request
@@ -55,8 +43,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	def business_employee
 		sucursal = BusinessSucursal.find_by(id: params[:sucursal_id])
 		if sucursal
-			user = User.new(user_params)
-			user.password = SymmetricEncryption.encrypt params[:password]
+			user = create_user(501)
 			if user.save
 				render :json => user, status: :ok
 			else
@@ -70,6 +57,14 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	end
 
 	private
+
+	def create_user(type)
+		user = User.new(user_params)
+		user.type_id = type
+		user.password = SymmetricEncryption.encrypt params[:password]
+		user.downcase_fields
+		return user
+	end
 
 	def user_params
 		params.permit(:email, :address_description, :address_latitude, :address_longitude, :name, :lastname,

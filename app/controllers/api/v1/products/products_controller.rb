@@ -2,7 +2,7 @@ class Api::V1::Products::ProductsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
 	def create
-		if not @user
+		if @user
 			product = Product.new(products_params)
 			product.downcase_fields
 			if product.save

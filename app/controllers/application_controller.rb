@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
   skip_before_filter :verify_authenticity_token
 
   def upload_blob(blob_name, file, id)
-    client = Azure::Storage::Client.create(:storage_account_name => "frepiblobs", :storage_access_key => "IK9Plttm3fkAXZhcz0rig2ZD6GwyDUwIrtKBz1Lm0nr6hZuduVN9ktdWaFmrplyBdK/L5mwjueLloqM87cTP4A==")
+    client = Azure::Storage::Client.create(:storage_account_name => "frepiblobs", :storage_access_key => "L6o6SJUjxA/e2emT915E9HpTYt5KksXFH8YB4ZSYWpsPsi9tQfy1pXahcDm+tk6K4SES6DkLPQMmafjVLvbQzA==")
     blobs = client.blob_client
-    Azure::Storage.setup(:storage_account_name => "frepiblobs", :storage_access_key => "IK9Plttm3fkAXZhcz0rig2ZD6GwyDUwIrtKBz1Lm0nr6hZuduVN9ktdWaFmrplyBdK/L5mwjueLloqM87cTP4A==")
+    Azure::Storage.setup(:storage_account_name => "frepiblobs", :storage_access_key => "L6o6SJUjxA/e2emT915E9HpTYt5KksXFH8YB4ZSYWpsPsi9tQfy1pXahcDm+tk6K4SES6DkLPQMmafjVLvbQzA==")
     blobs = Azure::Storage::Blob::BlobService.new
     blobs.with_filter(Azure::Storage::Core::Filter::ExponentialRetryPolicyFilter.new)
     container = blobs.get_container_metadata(blob_name)
