@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 				post 'business_employee', to: :business_employee, controller: 'register'
 				post 'supervisor', to: :supervisor, controller: 'register'
 				post 'administrator', to: :administrator, controller: 'register'
+				post 'confirmation_email', to: :confirmation_email, controller: 'register'
 			end
 
 			namespace :products do
