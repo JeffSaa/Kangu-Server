@@ -58,11 +58,16 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 
 	private
 
+	def send_confirmation_mail
+		RegisterMailer.confirm_account(self).delivery_later
+	end
+
 	def create_user(type)
 		user = User.new(user_params)
 		user.type_id = type
 		user.password = SymmetricEncryption.encrypt params[:password]
 		user.downcase_fields
+		RegisterMailer.confirm_account(user).deliver_now
 		return user
 	end
 
