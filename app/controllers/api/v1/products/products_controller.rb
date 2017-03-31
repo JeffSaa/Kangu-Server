@@ -5,7 +5,7 @@ class Api::V1::Products::ProductsController < ApplicationController
 		if @user
 			product = Product.new(products_params)
 			product.downcase_fields
-			if product
+			if product.save
 				#upload_blob("productsphotos", params[:photo], product.id)
 				render :json => product, status: :ok
 			end
