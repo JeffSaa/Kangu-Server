@@ -24,7 +24,8 @@ class Api::V1::Orders::BusinessController < ApplicationController
 	def get_business_order_product
 		if @user
 			sucursal = BusinessSucursal.find_by(id: @user.sucursal_id)
-			users = User.where(sucursal_id: sucursal.id, active: true)
+			owner = get_sucursal_owner(sucursal)
+			users = User.where("(sucursal_id = ? AND active = ?) OR id = ?", sucursal.id, true, owner.id)
 			response = [];
 			users.each do |u|
 				temp = {user: u, businessproducts: []}

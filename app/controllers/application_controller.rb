@@ -2,6 +2,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   skip_before_filter :verify_authenticity_token
 
+  def get_sucursal_owner(sucursal)
+    business = BusinessPlace.find_by(id: sucursal.business_id)
+    return User.find_by(id: business.user_id)
+  end
+
   def upload_blob(blob_name, file, id)
     client = Azure::Storage::Client.create(:storage_account_name => "frepiblob", :storage_access_key => "qcoRYLfYCGVYdS/AtMfTJ7YYroyY5TNNC3Hr2hFi0R1pwOu4wNBHr4ltiOqkaGQC4gPIMr1L4M1eoBlSGYli7g==")
     blobs = client.blob_client
