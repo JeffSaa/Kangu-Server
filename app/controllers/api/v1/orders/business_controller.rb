@@ -23,7 +23,11 @@ class Api::V1::Orders::BusinessController < ApplicationController
 
 	def get_business_order_product
 		if @user
-			sucursal = BusinessSucursal.find_by(id: @user.sucursal_id)
+			if @user.type_id == 301
+				sucursal = BusinessSucursal.find_by(id: params[:id])
+			else
+				sucursal = BusinessSucursal.find_by(id: @user.sucursal_id)
+			end
 			owner = get_sucursal_owner(sucursal)
 			users = User.where("(sucursal_id = ? AND active = ?) OR id = ?", sucursal.id, true, owner.id)
 			response = [];
