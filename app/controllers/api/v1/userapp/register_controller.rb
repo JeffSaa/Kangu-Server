@@ -3,7 +3,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	def provider
 		user = create_user(401)
 		if user.save
-			send_confirmation_mail(user)
+			#send_confirmation_mail(user)
 			render :json => user, status: :ok
 		else
 			error = {code: 123}
@@ -14,7 +14,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	def supervisor
 		user = create_user(102)
 		if user.save
-			send_confirmation_mail(user)
+			#send_confirmation_mail(user)
 			render :json => user, status: :ok
 		else
 			error = {code: 123}
@@ -25,7 +25,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	def administrator
 		user = create_user(101)
 		if user.save
-			send_confirmation_mail(user)
+			#send_confirmation_mail(user)
 			render :json => user, status: :ok
 		else
 			error = {code: 123}
@@ -36,7 +36,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	def business
 		user = create_user(301)
 		if user.save
-			send_confirmation_mail(user)
+			#send_confirmation_mail(user)
 			render :json => user, status: :ok
 		else
 			error = {code: 1}
@@ -49,7 +49,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 		if sucursal
 			user = create_user(501)
 			if user.save
-				send_confirmation_mail(user)
+				#send_confirmation_mail(user)
 				render :json => user, status: :ok
 			else
 				error = {code: 15}
@@ -80,6 +80,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 		user.type_id = type
 		user.password = SymmetricEncryption.encrypt params[:password]
 		user.downcase_fields
+		user.active = true
 		return user
 	end
 

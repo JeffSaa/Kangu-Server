@@ -22,7 +22,7 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 	end
 
 	def get_user_request
-		request = User.where(active: false, sucursal_id: params[:sucursal_id])
+		request = User.where(active: true, sucursal_id: params[:sucursal_id], type_id: 501)
 		render :json => {model: request}, status: :ok
 	end
 
