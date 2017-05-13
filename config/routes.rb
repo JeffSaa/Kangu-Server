@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 			namespace :products do
 				resources :products, format: :json
 				post 'search_product', to: :search_product, controller: 'products'
+				post 'get_products_info', to: :get_products_info, controller: 'products'
 			end
 
 			namespace :orders do

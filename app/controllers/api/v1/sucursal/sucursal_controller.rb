@@ -29,7 +29,7 @@ class Api::V1::Sucursal::SucursalController < ApplicationController
 	def accept_user_request
 		empl = User.find_by(id: params[:user_id])
 		if empl
-			empl.update(active: true, type_id: params[:type_id])
+			empl.update(type_id: params[:type_id])
 			render :json => empl, status: :ok
 		else
 			error = {code: 16}

@@ -12,6 +12,17 @@ class Api::V1::Products::ProductsController < ApplicationController
 		end
 	end
 
+	def get_products_info
+		if @user
+			products = params[:products]
+			response = []
+			products.each do |p|
+				response << Product.find(p[:id])
+			end
+			render :json => {model: response}, status: :ok
+		end
+	end
+
 	def search_product
 		q = params[:search].downcase
 		products = Product.where("name like '#{q}%'").paginate(:per_page => Constants::PRODUCT_PER_PAGE,
