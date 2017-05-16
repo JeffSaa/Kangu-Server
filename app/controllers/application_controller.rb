@@ -2,11 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   skip_before_filter :verify_authenticity_token
 
-  def get_sucursal_owner(sucursal)
-    business = BusinessPlace.find_by(id: sucursal.business_id)
-    return User.find_by(id: business.user_id)
-  end
-
   def upload_blob(blob_name, file, id)
     client = Azure::Storage::Client.create(:storage_account_name => "frepiblob", :storage_access_key => "qcoRYLfYCGVYdS/AtMfTJ7YYroyY5TNNC3Hr2hFi0R1pwOu4wNBHr4ltiOqkaGQC4gPIMr1L4M1eoBlSGYli7g==")
     blobs = client.blob_client
@@ -17,6 +12,10 @@ class ApplicationController < ActionController::Base
     file_data = file.tempfile
     content = File.open(file_data, 'rb') { |file| file.read }
     blobs.create_block_blob(container.name, id.to_s, content)
+  end
+
+  def render_user(user)
+    render :json => user, status: :ok
   end
 
   def user_belong_to_sucursal(user_id, sucursal_id)
@@ -43,20 +42,34 @@ class ApplicationController < ActionController::Base
     return p[:product_info][:entry_price] + p[:product_info][:entry_price] * p[:product_info][:business_price] / 100
   end
 
-  private 
+  def render_response_json(code, status)
+    render :json => {code: code}, status: status
+  end
 
   def validate_authentification_token
-  	@token = Token.find_by(id: request.headers["Authorization"])
-  	if not @token 
-  		error = {code: 100}
-  		render :json => error, status: :bad_request
+    @token = Token.find_by(id: request.headers["Authorization"])
+    if not @token
+      render_response_json(100, :bad_request)
     else
-      @user = User.find_by(id: @token.user_id)
-      if not @user
-        error = {code: 101}
-        render :json => error, status: :bad_request
+      @current_user = User.find_by(id: @token.user_id)
+      if not @current_user
+        render_response_json(101, :bad_request)
+      else
       end
-  	end 	
+    end   
   end
+
+  def validate_token
+    token = Token.find_by(id: request.headers["Authorization"])
+    if token
+      @token_validation =  User.find_by(id: token.user_id)
+    end
+  end
+
+  def charge_exist(user, type)
+    
+  end
+
+  private 
 
 end

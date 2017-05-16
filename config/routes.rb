@@ -21,12 +21,7 @@ Rails.application.routes.draw do
 			namespace :userapp do
 				resources :login, format: :json
 				resources :logout, format: :json
-				post 'provider', to: :provider, controller: 'register'
-				post 'business', to: :business, controller: 'register'
-				post 'business_employee', to: :business_employee, controller: 'register'
-				post 'supervisor', to: :supervisor, controller: 'register'
-				post 'administrator', to: :administrator, controller: 'register'
-				post 'confirmation_email', to: :confirmation_email, controller: 'register'
+				post :register, to: :register, controller: :register
 			end
 
 			namespace :products do
