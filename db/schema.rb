@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170427202904) do
+ActiveRecord::Schema.define(version: 20170516182546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 20170427202904) do
 
   create_table "business_places", force: :cascade do |t|
     t.string   "name"
-    t.integer  "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -34,13 +33,14 @@ ActiveRecord::Schema.define(version: 20170427202904) do
 
   create_table "business_sucursals", force: :cascade do |t|
     t.integer  "business_id"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.string   "name"
     t.integer  "phone"
     t.string   "address_description"
     t.integer  "address_latitude"
     t.integer  "address_longitude"
+    t.integer  "coins",               default: 0
   end
 
   create_table "categories", force: :cascade do |t|
@@ -136,25 +136,19 @@ ActiveRecord::Schema.define(version: 20170427202904) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer  "type_id",              default: 0
     t.string   "email"
     t.string   "password"
     t.string   "address_description"
     t.float    "address_latitude"
     t.float    "address_longitude"
-    t.boolean  "have_custom_products", default: false
-    t.integer  "frepi_coins",          default: 0
-    t.integer  "quota_max",            default: 0
-    t.integer  "current_quota",        default: 0
-    t.datetime "created_at",                                                 null: false
-    t.datetime "updated_at",                                                 null: false
-    t.integer  "user_group_id",        default: 0
-    t.boolean  "active",               default: false
+    t.integer  "frepi_coins",         default: 0
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.boolean  "active",              default: false
     t.string   "name"
     t.string   "lastname"
-    t.integer  "sucursal_id",          default: 0
     t.integer  "phone"
-    t.uuid     "uuid",                 default: -> { "uuid_generate_v4()" }
+    t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
   end
 
 end

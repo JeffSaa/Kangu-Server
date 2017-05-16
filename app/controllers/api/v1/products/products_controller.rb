@@ -17,7 +17,10 @@ class Api::V1::Products::ProductsController < ApplicationController
 			products = params[:products]
 			response = []
 			products.each do |p|
-				response << Product.find(p[:id])
+				p = Product.find(p[:id])
+				if p
+					response << p
+				end
 			end
 			render :json => {model: response}, status: :ok
 		end
