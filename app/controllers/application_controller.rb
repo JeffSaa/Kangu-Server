@@ -82,6 +82,10 @@ class ApplicationController < ActionController::Base
     p "------------- DEBUG -------------"    
   end
 
+  def charge_params
+    params.permit(:user_id, :target_id, :type_id)
+  end
+
   private 
 
 end

@@ -28,6 +28,14 @@ Rails.application.routes.draw do
 				resources :charges, format: :json
 			end
 
+			namespace :businessplace do
+				resources :businessplace, format: :json
+			end
+
+			namespace :businesssucursal do
+				resources :businesssucursal, format: :json
+			end
+
 		end
 	end
 
