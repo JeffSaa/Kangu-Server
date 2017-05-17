@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  entry_price: 1.5
+  natural_price: 1.5
+  business_price: 1.5
+  coin_price: 1
+  discount: 1.5
+  subcategorie_id: 1
+  measurement_type: 1
+  measurement_variant: 1
+  unit_quantity: 1.5
+  default_quantity: 1.5
+
+two:
+  name: MyString
+  entry_price: 1.5
+  natural_price: 1.5
+  business_price: 1.5
+  coin_price: 1
+  discount: 1.5
+  subcategorie_id: 1
+  measurement_type: 1
+  measurement_variant: 1
+  unit_quantity: 1.5
+  default_quantity: 1.5

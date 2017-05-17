@@ -62,12 +62,12 @@ class ApplicationController < ActionController::Base
   def validate_token
     token = Token.find_by(id: request.headers["Authorization"])
     if token
-      @token_validation =  User.find_by(id: token.user_id)
+      return User.find_by(id: token.user_id)
     end
   end
 
   def charge_exist(user, type)
-    
+    return Charge.find_by(user_id: user.id, type_id: type)
   end
 
   private 
