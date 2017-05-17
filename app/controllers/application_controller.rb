@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
   skip_before_filter :verify_authenticity_token
 
   def upload_blob(blob_name, file, id)
-    client = Azure::Storage::Client.create(:storage_account_name => "frepiblob", :storage_access_key => "qcoRYLfYCGVYdS/AtMfTJ7YYroyY5TNNC3Hr2hFi0R1pwOu4wNBHr4ltiOqkaGQC4gPIMr1L4M1eoBlSGYli7g==")
+    client = Azure::Storage::Client.create(:storage_account_name => "testblobjeff", :storage_access_key => "M8APPr3vAIJ0bGDXslE5cXqdQLzqd3hve6lQ3WvFoi96xv6IB8alkfSvhmZgYn7PfiBjj5XKhQvsWI/LrlvbDw==")
     blobs = client.blob_client
-    Azure::Storage.setup(:storage_account_name => "frepiblob", :storage_access_key => "qcoRYLfYCGVYdS/AtMfTJ7YYroyY5TNNC3Hr2hFi0R1pwOu4wNBHr4ltiOqkaGQC4gPIMr1L4M1eoBlSGYli7g==")
+    Azure::Storage.setup(:storage_account_name => "testblobjeff", :storage_access_key => "M8APPr3vAIJ0bGDXslE5cXqdQLzqd3hve6lQ3WvFoi96xv6IB8alkfSvhmZgYn7PfiBjj5XKhQvsWI/LrlvbDw==")
     blobs = Azure::Storage::Blob::BlobService.new
     blobs.with_filter(Azure::Storage::Core::Filter::ExponentialRetryPolicyFilter.new)
     container = blobs.get_container_metadata(blob_name)
@@ -35,19 +35,6 @@ class ApplicationController < ActionController::Base
       response[:isBusinessEmployee] = true
     end
     render :json => response, status: :ok
-  end
-
-  def user_belong_to_sucursal(user_id, sucursal_id)
-    user = User.find_by(id: user_id)
-    sucursal = BusinessSucursal.find_by(id: sucursal_id)
-    if user && sucursal
-      business = BusinessPlace.find_by(id: sucursal.business_id)
-      render :json => business, status: :ok
-    else
-      error = {code: 102}
-      render :json => error, status: :bad_request
-    end
-    return false
   end
 
   def set_paginate_header(response, per_page, model, current_page)
@@ -87,6 +74,12 @@ class ApplicationController < ActionController::Base
 
   def charge_exist(user, type)
     return Charge.find_by(user_id: user.id, type_id: type)
+  end
+
+  def show_console(o)
+    p "------------- DEBUG -------------"
+    p o
+    p "------------- DEBUG -------------"    
   end
 
   private 

@@ -6,8 +6,7 @@ class Api::V1::Userapp::LogoutController < ApplicationController
 			if token.destroy
 				render :json => { model: token }, status: :ok
 			else
-				error = {code: 15}
-				render :json => {model: error}, status: :bad_request
+				render_response_json(15, :bad_request)
 			end
 		end
 	end
