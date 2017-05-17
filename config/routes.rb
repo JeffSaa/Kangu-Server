@@ -19,6 +19,15 @@ Rails.application.routes.draw do
 				resources :variants, format: :json
 			end
 
+			namespace :categories do
+				resources :categories, format: :json
+				post :get_all_cat_and_subcat, to: :get_all_cat_and_subcat, controller: :categories
+			end
+
+			namespace :charges do
+				resources :charges, format: :json
+			end
+
 		end
 	end
 
