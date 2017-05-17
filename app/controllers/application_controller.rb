@@ -14,8 +14,27 @@ class ApplicationController < ActionController::Base
     blobs.create_block_blob(container.name, id.to_s, content)
   end
 
-  def render_user(user)
-    render :json => user, status: :ok
+  def render_user(user, token = nil)
+    response = {token: token, user_info: user, isBusinessEmployee: false, isFrepiAdmin: false, isFrepiSupervisor: false}
+    if charge_exist(user, Constants::FREPI_ADMIN)
+      response[:isFrepiAdmin] = true
+    end
+    if charge_exist(user, Constants::FREPI_SUPERVISOR)
+      response[:isFrepiSupervisor] = true
+    end
+    if charge_exist(user, Constants::BUSINESS_OWNER)
+      response[:isBusinessEmployee] = true
+    end
+    if charge_exist(user, Constants::BUSINESS_OPERATOR)
+      response[:isBusinessEmployee] = true
+    end
+    if charge_exist(user, Constants::BUSINESS_CHEF)
+      response[:isBusinessEmployee] = true
+    end
+    if charge_exist(user, Constants::BUSINESS_ADMIN)
+      response[:isBusinessEmployee] = true
+    end
+    render :json => response, status: :ok
   end
 
   def user_belong_to_sucursal(user_id, sucursal_id)

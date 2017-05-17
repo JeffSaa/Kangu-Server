@@ -7,7 +7,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 		if charge_exist(validate_token(), Constants::FREPI_ADMIN)
 			user.active = true
 		end
-		if user.save
+		if user
 			render_user(user)
 		else
 			render_response_json(123, :bad_request)
@@ -23,11 +23,6 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 	end
 
 	private
-
-	def create_charge(user)
-		charge = nil
-		return charge
-	end
 
 	def user_params
 		params.permit(:email, :address_description, :address_latitude, :address_longitude, :name, :lastname, :phone)

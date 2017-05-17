@@ -7,20 +7,15 @@ class Api::V1::Userapp::LoginController < ApplicationController
 			if user.active
 				token = Token.new(user_id: user.id)
 				if token.save
-					render :json => {token: token.id, user_name: user.name, user_lastname: user.lastname,
-						user_email: user.email, type: user.type_id, sucursal: user.sucursal_id,
-						phone: user.phone}, status: :ok
+					render_user(user, token.id)
 				else
-					error = {code: 4}
-					render :json => error, status: :bad_request
+					render_response_json(4, :bad_request)
 				end
 			else
-				error = {code: 3}
-				render :json => error, status: :unauthorized
+				render_response_json(3, :unauthorized)
 			end
 		else
-			error = {code: 2}
-			render :json => error, status: :not_found
+			render_response_json(2, :not_found)
 		end
 	end
 
