@@ -1,4 +1,4 @@
-class Api::V1::Variants::VariantsController < ApplicationController
+class Api::V1::Variant::VariantController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
 	def create

@@ -15,17 +15,17 @@ Rails.application.routes.draw do
 				post :search_product, to: :search_product, controller: :products
 			end
 
-			namespace :variants do
-				resources :variants, format: :json
+			namespace :variant do
+				resources :variant, format: :json
 			end
 
-			namespace :categories do
-				resources :categories, format: :json
+			namespace :categorie do
+				resources :categorie, format: :json
 				post :get_all_cat_and_subcat, to: :get_all_cat_and_subcat, controller: :categories
 			end
 
-			namespace :charges do
-				resources :charges, format: :json
+			namespace :charge do
+				resources :charge, format: :json
 			end
 
 			namespace :businessplace do
@@ -34,6 +34,10 @@ Rails.application.routes.draw do
 
 			namespace :businesssucursal do
 				resources :businesssucursal, format: :json
+			end
+
+			namespace :orders do
+				resources :orders, format: :json
 			end
 
 		end

@@ -1,4 +1,4 @@
-class Api::V1::Categories::CategoriesController < ApplicationController
+class Api::V1::Categorie::CategorieController < ApplicationController
 	before_action :validate_authentification_token, :except => [:create, :searchsub, :get_all_cat_and_subcat,
 		:show, :get_main_categories, :get_products_categories]
 

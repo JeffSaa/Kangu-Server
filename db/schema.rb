@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170517141303) do
+ActiveRecord::Schema.define(version: 20170518005837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,34 +68,27 @@ ActiveRecord::Schema.define(version: 20170517141303) do
 
   create_table "order_products", force: :cascade do |t|
     t.integer  "order_id",   default: 0
-    t.integer  "product_id", default: 0
     t.float    "price",      default: 0.0
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-    t.integer  "user_id"
     t.string   "comment"
     t.float    "quantity"
+    t.integer  "variant_id"
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "user_id",             default: 0
-    t.integer  "status",              default: 0
-    t.integer  "order_type",          default: 0
-    t.boolean  "isLate",              default: false
-    t.integer  "frepiman_id",         default: 0
-    t.integer  "shopper_id",          default: 0
-    t.float    "calification",        default: 0.0
-    t.date     "date"
-    t.time     "hour"
-    t.float    "paid",                default: 0.0
-    t.float    "due",                 default: 0.0
-    t.float    "interest",            default: 0.0
-    t.date     "interest_date_max"
-    t.integer  "interest_delay_days", default: 0
-    t.integer  "pay_mode",            default: 0
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.integer  "status",       default: 0
+    t.integer  "order_type",   default: 0
+    t.boolean  "isLate",       default: false
+    t.float    "calification", default: 0.0
+    t.float    "paid",         default: 0.0
+    t.float    "due",          default: 0.0
+    t.integer  "pay_mode",     default: 0
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.string   "comment"
+    t.datetime "datehour"
+    t.integer  "target_id"
   end
 
   create_table "product_groups", force: :cascade do |t|

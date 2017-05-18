@@ -1,4 +1,4 @@
-class Api::V1::Products::ProductsController < ApplicationController
+class Api::V1::Product::ProductController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
 	def create

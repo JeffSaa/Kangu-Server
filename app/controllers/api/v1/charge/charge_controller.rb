@@ -1,4 +1,4 @@
-class Api::V1::Charges::ChargesController < ApplicationController
+class Api::V1::Charge::ChargeController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create
