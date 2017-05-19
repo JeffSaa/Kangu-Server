@@ -6,7 +6,7 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 		place.downcase_fields
 		if place.save
 			upload_blob("businessplace", params[:photo], place.id)
-			charge = Charge.new(charge_params)
+			charge = create_charge()
 			if not charge_exist(@current_user, Constants::FREPI_ADMIN)
 				charge.user_id = @current_user.id
 			end
@@ -14,6 +14,14 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 				render :json => {charge: charge, businessplace: place}, status: :ok
 			end
 		end
+	end
+
+	def search
+		response = []
+		if params[:search].length > 0
+			response = BusinessPlace.where('name LIKE ?', "%#{params[:search]}%")
+		end
+		render :json => response, status: :ok
 	end
 
 	private

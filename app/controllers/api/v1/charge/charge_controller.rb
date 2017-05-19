@@ -3,7 +3,7 @@ class Api::V1::Charge::ChargeController < ApplicationController
 
 	def create
 		if charge_exist(@current_user, Constants::FREPI_ADMIN)
-			charge = Charge.new(charge_params())
+			charge = create_charge()
 			if charge.save
 				render :json => charge, status: :ok
 			end

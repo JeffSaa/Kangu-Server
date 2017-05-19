@@ -76,16 +76,20 @@ class ApplicationController < ActionController::Base
     return Charge.find_by(user_id: user.id, type_id: type)
   end
 
+  def create_charge
+    return Charge.new(charge_params)
+  end
+
   def show_console(o)
     p "------------- DEBUG -------------"
     p o
     p "------------- DEBUG -------------"    
   end
 
+  private 
+
   def charge_params
     params.permit(:user_id, :target_id, :type_id)
   end
-
-  private 
 
 end
