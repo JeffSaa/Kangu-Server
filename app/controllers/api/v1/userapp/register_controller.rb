@@ -4,10 +4,11 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 		user = User.new(user_params)
 		user.password = SymmetricEncryption.encrypt params[:password]
 		user.downcase_fields
-		if charge_exist(validate_token(), Constants::FREPI_ADMIN)
+		u = validate_token()
+		if u and charge_exist(u, Constants::FREPI_ADMIN)
 			user.active = true
 		end
-		if user
+		if user.save
 			render_user(user)
 		else
 			render_response_json(123, :bad_request)

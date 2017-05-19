@@ -40,6 +40,10 @@ Rails.application.routes.draw do
 				resources :orders, format: :json
 			end
 
+			namespace :users do
+				resources :users, format: :json
+			end
+
 		end
 	end
 
