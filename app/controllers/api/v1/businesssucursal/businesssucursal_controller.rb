@@ -4,13 +4,15 @@ class Api::V1::Businesssucursal::BusinesssucursalController < ApplicationControl
 	def create
 		sucursal = BusinessSucursal.new(sucursal_params)
 		sucursal.downcase_fields
-		charge = create_charge();
-		charge.type_id = Constants::BUSINESS_ADMIN
-		if not charge_exist(@current_user, Constants::FREPI_ADMIN)
-			charge.user_id = @current_user.id
-		end
-		if sucursal.save and charge.save
-			render :json => {sucursal: sucursal, charge: charge}, status: :ok
+		if sucursal.save
+			user = getPlaceOwner(params[:business_id])
+			params[:user_id] = user.id
+			params[:target_id] = sucursal.id
+			params[:type_id] = Constants::BUSINESS_ADMIN
+			charge = create_charge()
+			if charge.save
+				render :json => {sucursal: sucursal, charge: charge}, status: :ok
+			end
 		end
 	end
 

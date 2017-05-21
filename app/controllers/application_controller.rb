@@ -80,6 +80,11 @@ class ApplicationController < ActionController::Base
     return Charge.new(charge_params)
   end
 
+  def getPlaceOwner(id)
+    charge = Charge.find_by(target_id: id, type_id: Constants::BUSINESS_OWNER)
+    return User.find(charge.user_id)
+  end
+
   def show_console(o)
     p "------------- DEBUG -------------"
     p o
