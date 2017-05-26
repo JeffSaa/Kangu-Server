@@ -1,12 +1,12 @@
-class Api::V1::Variant::VariantController < ApplicationController
+class Api::V1::Variants::VariantsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
 	def create
 		if charge_exist(@current_user, Constants::FREPI_SUPERVISOR)
 			variant = ProductVariant.new(variant_params)
 			variant.downcase_fields
-			if variant.save
-				upload_blob("variant", params[:photo], variant.id)
+			if variant
+				#upload_blob("variant", params[:photo], variant.id)
 				render :json => variant, status: :ok
 			end
 		end
