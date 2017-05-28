@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518005837) do
+ActiveRecord::Schema.define(version: 20170528155101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,23 +105,23 @@ ActiveRecord::Schema.define(version: 20170518005837) do
     t.float    "business_price"
     t.integer  "coin_price"
     t.float    "discount"
-    t.integer  "subcategorie_id"
-    t.integer  "measurement_type"
-    t.integer  "measurement_variant"
     t.float    "unit_quantity"
     t.float    "default_quantity"
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
-    t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.uuid     "uuid",             default: -> { "uuid_generate_v4()" }
     t.integer  "product_id"
   end
 
   create_table "products", force: :cascade do |t|
     t.string   "name"
-    t.boolean  "enabled",    default: true
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
-    t.uuid     "uuid",       default: -> { "uuid_generate_v4()" }
+    t.boolean  "enabled",             default: true
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
+    t.integer  "measurement_type"
+    t.integer  "measurement_variant"
+    t.integer  "subcategorie_id"
   end
 
   create_table "tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
