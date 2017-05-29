@@ -13,6 +13,7 @@ Rails.application.routes.draw do
 			namespace :products do
 				resources :products, format: :json
 				post :search_product, to: :search_product, controller: :products
+				post :products_excel_creator, to: :products_excel_creator, controller: :products
 			end
 
 			namespace :variants do

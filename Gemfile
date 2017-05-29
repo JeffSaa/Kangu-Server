@@ -20,6 +20,7 @@ gem 'rack-cors', :require => 'rack/cors'
 gem 'azure-storage'
 gem 'activerecord-deprecated_finders'
 gem 'will_paginate'
+gem "roo", "~> 2.7.0"
 
 group :development, :test do
   gem 'byebug', platform: :mri

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170528155101) do
+ActiveRecord::Schema.define(version: 20170529155028) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,8 +103,8 @@ ActiveRecord::Schema.define(version: 20170528155101) do
     t.float    "entry_price"
     t.float    "natural_price"
     t.float    "business_price"
-    t.integer  "coin_price"
-    t.float    "discount"
+    t.integer  "coin_price",       default: 0
+    t.float    "discount",         default: 0.0
     t.float    "unit_quantity"
     t.float    "default_quantity"
     t.datetime "created_at",                                             null: false
