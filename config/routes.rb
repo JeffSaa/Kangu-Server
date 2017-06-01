@@ -46,6 +46,7 @@ Rails.application.routes.draw do
 
 			namespace :users do
 				resources :users, format: :json
+				post :search, to: :search, controller: :users
 			end
 
 		end
