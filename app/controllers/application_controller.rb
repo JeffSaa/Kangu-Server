@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_product_price(p)
-    return p[:product_info][:entry_price] + p[:product_info][:entry_price] * p[:product_info][:business_price] / 100
+    return p[:entry_price] + p[:entry_price] * p[:business_price] / 100
   end
 
   def render_response_json(code, status)

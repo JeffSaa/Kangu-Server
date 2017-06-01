@@ -9,17 +9,22 @@ class Api::V1::Orders::OrdersController < ApplicationController
 			order.due = params[:due]
 			order.paid = params[:paid]
 			order.target_id = params[:target_id]
+			order.order_type = params[:order_type]
+		else
+			order.target_id = @current_user.id
 		end
 		response = {order_info: order, products: []}
-		params[:products].each do |p|
-			op = OrderProduct.new(orderproduct_params(p))
-			if op
-				response[:products] << op
+		if order.save
+			params[:products].each do |p|
+				op = OrderProduct.new(orderproduct_params(p))
+				op.price = get_product_price(ProductVariant.find(op.variant_id))
+				op.order_id = order.id
+				if op.save
+					response[:products] << op
+				end
 			end
 		end
-		if order
-			render :json => response, status: :ok
-		end
+		render :json => response, status: :ok
 	end
 
 	private

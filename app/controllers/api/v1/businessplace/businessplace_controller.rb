@@ -7,6 +7,8 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 		if place.save
 			upload_blob("businessplace", params[:photo], place.id)
 			charge = create_charge()
+			charge.target_id = place.id
+			charge.type_id = Constants::BUSINESS_OWNER
 			if not charge_exist(@current_user, Constants::FREPI_ADMIN)
 				charge.user_id = @current_user.id
 			end
