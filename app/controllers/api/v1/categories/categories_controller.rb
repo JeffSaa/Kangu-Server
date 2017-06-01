@@ -2,12 +2,14 @@ class Api::V1::Categories::CategoriesController < ApplicationController
 	before_action :validate_authentification_token, :except => [:index]
 
 	def create
-		categorie = Categorie.new(categorie_params)
-		categorie.downcase_fields
-		if categorie.save
-			render :json => categorie, status: :ok
-		else
-			render :json => categorie, status: :bad_request
+		if charge_exist(@current_user, Constants::FREPI_ADMIN)
+			categorie = Categorie.new(categorie_params)
+			categorie.downcase_fields
+			if categorie.save
+				render :json => categorie, status: :ok
+			else
+				render :json => categorie, status: :bad_request
+			end
 		end
 	end
 

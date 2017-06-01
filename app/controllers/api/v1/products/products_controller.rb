@@ -55,7 +55,7 @@ class Api::V1::Products::ProductsController < ApplicationController
 	private
 
 	def products_params
-		params.permit(:name)
+		params.permit(:name, :measurement_type, :measurement_variant, :subcategorie_id)
 	end
 
 end

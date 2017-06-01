@@ -13,11 +13,11 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		response = {order_info: order, products: []}
 		params[:products].each do |p|
 			op = OrderProduct.new(orderproduct_params(p))
-			if op.save
+			if op
 				response[:products] << op
 			end
 		end
-		if order.save
+		if order
 			render :json => response, status: :ok
 		end
 	end
