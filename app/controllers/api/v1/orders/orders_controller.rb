@@ -27,6 +27,17 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def index
+		response = {received: [], buying: [], delivering: [], completed: [], disabled: []}
+		response.each_key.with_index do |key, index|
+			orders = Order.where(status: index)
+			orders.each do |o|
+				response[key] << {info: o, products: OrderProduct.where(order_id: o.id)}
+			end
+		end
+		render :json => response, status: :ok
+	end
+
 	private
 
 	def order_params
