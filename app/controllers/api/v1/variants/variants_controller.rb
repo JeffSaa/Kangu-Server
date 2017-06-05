@@ -16,7 +16,7 @@ class Api::V1::Variants::VariantsController < ApplicationController
 		variants = []
 		if params[:search].length > 0
 			q = params[:search].downcase
-			variants = Product.where('name LIKE ?', "%#{params[:search]}%")
+			variants = ProductVariant.where('name LIKE ?', "%#{params[:search]}%")
 		end
 		render :json => {model: variants}, status: :ok
 	end
