@@ -85,7 +85,7 @@ class ApplicationController < ActionController::Base
     return User.find(charge.user_id)
   end
 
-  def getPlaceAdmins(id)
+  def getSucursalAdmins(id)
     charges = Charge.where(target_id: id, type_id: Constants::BUSINESS_ADMIN)
     admins = []
     charges.each do |c|

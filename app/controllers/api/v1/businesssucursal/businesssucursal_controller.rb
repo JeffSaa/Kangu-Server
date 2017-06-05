@@ -25,6 +25,10 @@ class Api::V1::Businesssucursal::BusinesssucursalController < ApplicationControl
 		render :json => response, status: :ok
 	end
 
+	def admins
+		render :json => {model: getSucursalAdmins(params[:id])}, status: :ok
+	end
+
 	private
 
 	def sucursal_params

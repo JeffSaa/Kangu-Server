@@ -18,10 +18,6 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 		end
 	end
 
-	def get_admins
-		render :json => {model: getPlaceAdmins(params[:id])}, status: :ok
-	end
-
 	def show
 		response = {place: BusinessPlace.find(params[:id]), owner: getPlaceOwner(params[:id]), sucursal: BusinessSucursal.where(business_id:params[:id])}
 		render :json => response, status: :ok
