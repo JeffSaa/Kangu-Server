@@ -28,12 +28,10 @@ class Api::V1::Orders::OrdersController < ApplicationController
 	end
 
 	def index
-		response = {received: [], buying: [], delivering: [], completed: [], disabled: []}
-		response.each_key.with_index do |key, index|
-			orders = Order.where(status: index)
-			orders.each do |o|
-				response[key] << {info: o, products: OrderProduct.where(order_id: o.id)}
-			end
+		response = []
+		orders = Order.where(status: params[:status])
+		orders.each do |o|
+			response << {info: o, products: OrderProduct.where(order_id: o.id)}
 		end
 		render :json => response, status: :ok
 	end
