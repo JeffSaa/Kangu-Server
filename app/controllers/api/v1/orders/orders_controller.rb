@@ -31,7 +31,12 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		response = []
 		orders = Order.where(status: params[:status])
 		orders.each do |o|
-			response << {info: o, products: OrderProduct.where(order_id: o.id)}
+			item =  {info: {order: o, sucursal: BusinessSucursal.find(o.target_id)},
+			products: []}
+			OrderProduct.where(order_id: o.id).each do |op|
+				item[:products] << {product: op, info: ProductVariant.find(op.variant_id)}
+			end
+			response << item
 		end
 		render :json => response, status: :ok
 	end
