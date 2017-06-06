@@ -43,6 +43,9 @@ Rails.application.routes.draw do
 
 			namespace :orders do
 				resources :orders, format: :json
+				post :advance, to: :advance, controller: :orders
+				post :return, to: :return, controller: :orders
+				post :disable, to: :disable, controller: :orders			
 			end
 
 			namespace :users do

@@ -41,7 +41,29 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def advance
+		order = Order.find(params[:id])
+		if order.status < 3 and order.update(status: order.status+1)
+			render :json => order, status: :ok
+		end
+	end
+
+	def return
+		change_status(0, params[:id])
+	end
+
+	def disable
+		change_status(4, params[:id])
+	end
+
 	private
+
+	def change_status(status, id)
+		order = Order.find(id)
+		if order.update(status: status)
+			render :json => order, status: :ok
+		end
+	end
 
 	def order_params
 		params.permit(:comment, :datehour)
