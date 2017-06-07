@@ -56,7 +56,21 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		change_status(4, params[:id])
 	end
 
+	def update_status
+		response = []
+		params[:products].each do |product|
+			p =  OrderProduct.find(product[:id])
+			p.update(update_orderproduct_params(product))
+			response << p
+		end
+		render :json => response, status: :ok
+	end
+
 	private
+
+	def update_orderproduct_params(p)
+		p.permit(:quantity, :comment, :status)
+	end
 
 	def change_status(status, id)
 		order = Order.find(id)

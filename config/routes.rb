@@ -45,7 +45,8 @@ Rails.application.routes.draw do
 				resources :orders, format: :json
 				post :advance, to: :advance, controller: :orders
 				post :return, to: :return, controller: :orders
-				post :disable, to: :disable, controller: :orders			
+				post :disable, to: :disable, controller: :orders	
+				put :update_status, to: :update_status, controller: :orders		
 			end
 
 			namespace :users do
