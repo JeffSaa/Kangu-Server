@@ -19,6 +19,7 @@ class Api::V1::Orders::OrdersController < ApplicationController
 				op = OrderProduct.new(orderproduct_params(p))
 				op.price = get_product_price(ProductVariant.find(op.variant_id))
 				op.order_id = order.id
+				op.last_quantity = op.quantity
 				if op.save
 					response[:products] << op
 				end
@@ -61,6 +62,7 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		response = []
 		params[:products].each do |product|
 			p =  OrderProduct.find(product[:id])
+			p.update(last_quantity: p.quantity)
 			p.update(update_orderproduct_params(product))
 			response << p
 		end
