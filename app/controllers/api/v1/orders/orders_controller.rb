@@ -34,7 +34,8 @@ class Api::V1::Orders::OrdersController < ApplicationController
 			item =  {info: {order: o, sucursal: BusinessSucursal.find(o.target_id)},
 			products: []}
 			OrderProduct.where(order_id: o.id).each do |op|
-				item[:products] << {product: op, info: ProductVariant.find(op.variant_id)}
+				variant = ProductVariant.find(op.variant_id)
+				item[:products] << {order_product: op, variant: variant, product: Product.find(variant.product_id)}
 			end
 			response << item
 		end
