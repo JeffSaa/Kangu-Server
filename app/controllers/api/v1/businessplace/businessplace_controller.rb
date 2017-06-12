@@ -1,6 +1,15 @@
 class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 	before_action :validate_authentification_token
 
+	def index
+		response = []
+		places = BusinessPlace.all
+		places.each do |p|
+			response << {place: p, sucursal: BusinessSucursal.where(business_id: p.id)}
+		end
+		render :json => {model: response}, status: :ok
+	end
+
 	def create
 		place = BusinessPlace.new(place_params)
 		place.downcase_fields
