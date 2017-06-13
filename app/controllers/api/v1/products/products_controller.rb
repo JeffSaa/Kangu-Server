@@ -1,6 +1,15 @@
 class Api::V1::Products::ProductsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
+	def index
+		render :json => {model: Product.all}, status: :ok
+	end
+
+	def show
+		response = {product: Product.find(params[:id]), variants: ProductVariant.where(product_id: params[:id])}
+		render :json => response, status: :ok
+	end
+
 	def create
 		if charge_exist(@current_user, Constants::FREPI_ADMIN)
 			product = Product.new(products_params)

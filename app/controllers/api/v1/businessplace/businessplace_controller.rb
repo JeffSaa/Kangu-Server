@@ -5,7 +5,7 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 		response = []
 		places = BusinessPlace.all
 		places.each do |p|
-			response << {place: p, sucursal: BusinessSucursal.where(business_id: p.id)}
+			response << {place: p, sucursals: BusinessSucursal.where(business_id: p.id)}
 		end
 		render :json => {model: response}, status: :ok
 	end
