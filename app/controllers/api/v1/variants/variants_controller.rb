@@ -24,8 +24,8 @@ class Api::V1::Variants::VariantsController < ApplicationController
 	private
 
 	def variant_params
-		params.permit(:name, :entry_price, :natural_price, :business_price, :coin_price, :discount, :subcategorie_id,
-			:measurement_type, :measurement_variant, :unit_measurement, :default_quantity, :product_id)
+		params.permit(:name, :entry_price, :natural_percent, :natural_gain, :business_percent, :business_gain, :coin_price,
+			:discount, :subcategorie_id, :measurement_type, :measurement_variant, :unit_measurement, :default_quantity, :product_id)
 	end
 
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170613203214) do
+ActiveRecord::Schema.define(version: 20170614174054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,11 +110,11 @@ ActiveRecord::Schema.define(version: 20170613203214) do
     t.datetime "updated_at",                                             null: false
     t.uuid     "uuid",             default: -> { "uuid_generate_v4()" }
     t.integer  "product_id"
-    t.integer  "unit_measurement"
     t.float    "business_percent"
     t.float    "business_gain"
     t.float    "natural_percent"
     t.float    "natural_gain"
+    t.float    "unit_measurement", default: 0.0
   end
 
   create_table "products", force: :cascade do |t|
