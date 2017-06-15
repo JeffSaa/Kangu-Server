@@ -77,13 +77,12 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		orders.each do |o|
 			products.push(*OrderProduct.where(order_id: o.id))
 		end
-		#products = Hash[a.map.with_index.to_a]
 		products = products.group_by{|p| p.variant_id}
 		products.each do |p|
 			duplicates << p.last
 		end
 		duplicates.each do |d|
-			response << {product: Product.find(d.first.variant_id), quantity: d.inject(0){|sum,e| sum + e.quantity }}
+			response << {product: Product.find(d.first.variant_id), quantity: d.inject(0){|sum,e| sum + e.quantity}, duplicates: d}
 		end
 		render :json => response, status: :ok
 	end
