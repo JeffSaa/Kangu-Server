@@ -3,19 +3,19 @@ default: &default
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: localhost
-  username: kangudb
-  password: k4ngud4t4b4s3
+  username: jeff
+  password: jeff
 
 development:
   <<: *default
-  database: Kangu_development
+  database: Frepi_development
 
 test:
   <<: *default
-  database: Kangu_test
+  database: Frepi_test
 
 production:
   <<: *default
-  database: Kangu_production
-  username: kangudb
-  password: k4ngud4t4b4s3
+  database: Frepi_production
+  username: jeff
+  password: jeff
