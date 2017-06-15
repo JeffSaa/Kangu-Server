@@ -82,7 +82,9 @@ class Api::V1::Orders::OrdersController < ApplicationController
 			duplicates << p.last
 		end
 		duplicates.each do |d|
-			response << {product: Product.find(d.first.variant_id), quantity: d.inject(0){|sum,e| sum + e.quantity}, duplicates: d}
+			variant = ProductVariant.find(d.first.variant_id)
+			response << {variant: variant, product: Product.find(variant.product_id), duplicates: d,
+				quantity: d.inject(0){|sum,e| sum + e.quantity}}
 		end
 		render :json => response, status: :ok
 	end
