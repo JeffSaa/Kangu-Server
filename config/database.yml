@@ -8,14 +8,14 @@ default: &default
 
 development:
   <<: *default
-  database: Frepi_development
+  database: Kangu_development
 
 test:
   <<: *default
-  database: Frepi_test
+  database: Kangu_test
 
 production:
   <<: *default
-  database: Frepi_production
-  username: jeff
-  password: jeff
+  database: Kangu_production
+  username: kangudb
+  password: k4ngud4t4b4s3
