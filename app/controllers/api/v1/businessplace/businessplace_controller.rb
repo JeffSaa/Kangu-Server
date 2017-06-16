@@ -14,7 +14,9 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 		place = BusinessPlace.new(place_params)
 		place.downcase_fields
 		if place.save
-			upload_blob("businessplace", params[:photo], place.id)
+			if params[:photo]
+				upload_blob("businessplace", params[:photo], place.id)
+			end
 			charge = create_charge()
 			charge.target_id = place.id
 			charge.type_id = Constants::BUSINESS_OWNER

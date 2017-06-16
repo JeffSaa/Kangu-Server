@@ -3,9 +3,16 @@ class ApplicationController < ActionController::Base
   skip_before_filter :verify_authenticity_token
 
   def upload_blob(blob_name, file, id)
-    client = Azure::Storage::Client.create(:storage_account_name => "kangublobs", :storage_access_key => "5ap3LRnhWOmMzNvQEkzFI6q23MLFTSkGjvK1N4FrD5RMhklpj0QSvEaIyubtibyRxoYHQvhdEnZxgUizaJ989Q==")
-    blobs = client.blob_client
-    Azure::Storage.setup(:storage_account_name => "kangublobs", :storage_access_key => "5ap3LRnhWOmMzNvQEkzFI6q23MLFTSkGjvK1N4FrD5RMhklpj0QSvEaIyubtibyRxoYHQvhdEnZxgUizaJ989Q==")
+    if Rails.env.production?
+      client = Azure::Storage::Client.create(:storage_account_name => "kangublobs", :storage_access_key => "5ap3LRnhWOmMzNvQEkzFI6q23MLFTSkGjvK1N4FrD5RMhklpj0QSvEaIyubtibyRxoYHQvhdEnZxgUizaJ989Q==")
+      blobs = client.blob_client
+      Azure::Storage.setup(:storage_account_name => "kangublobs", :storage_access_key => "5ap3LRnhWOmMzNvQEkzFI6q23MLFTSkGjvK1N4FrD5RMhklpj0QSvEaIyubtibyRxoYHQvhdEnZxgUizaJ989Q==")
+    end
+    if Rails.env.development?
+      client = Azure::Storage::Client.create(:storage_account_name => "kangublobdev", :storage_access_key => "4r3osmtsUDBSldQTGG4q3uQ28EmdfHviNMs8m5SFCciXac+s8mVxdbxPcePPy+27BehNrQ5/FlUETsHHp09D9A==")
+      blobs = client.blob_client
+      Azure::Storage.setup(:storage_account_name => "kangublobdev", :storage_access_key => "4r3osmtsUDBSldQTGG4q3uQ28EmdfHviNMs8m5SFCciXac+s8mVxdbxPcePPy+27BehNrQ5/FlUETsHHp09D9A==")
+    end
     blobs = Azure::Storage::Blob::BlobService.new
     blobs.with_filter(Azure::Storage::Core::Filter::ExponentialRetryPolicyFilter.new)
     container = blobs.get_container_metadata(blob_name)

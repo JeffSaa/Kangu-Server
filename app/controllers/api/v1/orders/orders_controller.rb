@@ -46,6 +46,12 @@ class Api::V1::Orders::OrdersController < ApplicationController
 	def advance
 		order = Order.find(params[:id])
 		if order.status < 3 and order.update(status: order.status+1)
+			if order.status == 2
+				products = OrderProduct.where(order_id: order.id)
+				products.each do |p|
+					p.update(price: get_product_price(ProductVariant.find(p.variant_id)))
+				end
+			end
 			render :json => order, status: :ok
 		end
 	end
