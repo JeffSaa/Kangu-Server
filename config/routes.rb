@@ -55,6 +55,10 @@ Rails.application.routes.draw do
 				post :search, to: :search, controller: :users
 			end
 
+			namespace :administration do
+				post :close_day, to: :close_day, controller: :accounting
+			end
+
 		end
 	end
 
