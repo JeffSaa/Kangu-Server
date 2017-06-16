@@ -2,7 +2,7 @@ class Api::V1::Categories::CategoriesController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create
-		if charge_exist(@current_user, Constants::FREPI_ADMIN)
+		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			categorie = Categorie.new(categorie_params)
 			categorie.downcase_fields
 			if categorie.save

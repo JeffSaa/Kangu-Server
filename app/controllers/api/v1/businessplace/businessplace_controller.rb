@@ -18,7 +18,7 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 			charge = create_charge()
 			charge.target_id = place.id
 			charge.type_id = Constants::BUSINESS_OWNER
-			if not charge_exist(@current_user, Constants::FREPI_ADMIN)
+			if not charge_exist(@current_user, Constants::KANGU_ADMIN)
 				charge.user_id = @current_user.id
 			end
 			if charge.save

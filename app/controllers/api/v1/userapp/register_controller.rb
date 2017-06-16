@@ -5,7 +5,7 @@ class Api::V1::Userapp::RegisterController < ApplicationController
 		user.password = SymmetricEncryption.encrypt params[:password]
 		user.downcase_fields
 		u = validate_token()
-		if u and charge_exist(u, Constants::FREPI_ADMIN)
+		if u and charge_exist(u, Constants::KANGU_ADMIN)
 			user.active = true
 		end
 		if user.save

@@ -15,12 +15,12 @@ class ApplicationController < ActionController::Base
   end
 
   def render_user(user, token = nil)
-    response = {token: token, user_info: user, isBusinessEmployee: false, isFrepiAdmin: false, isFrepiSupervisor: false}
-    if charge_exist(user, Constants::FREPI_ADMIN)
-      response[:isFrepiAdmin] = true
+    response = {token: token, user_info: user, isBusinessEmployee: false, isKanguAdmin: false, isKanguSupervisor: false}
+    if charge_exist(user, Constants::KANGU_ADMIN)
+      response[:isKanguAdmin] = true
     end
-    if charge_exist(user, Constants::FREPI_SUPERVISOR)
-      response[:isFrepiSupervisor] = true
+    if charge_exist(user, Constants::KANGU_SUPERVISOR)
+      response[:isKanguSupervisor] = true
     end
     if charge_exist(user, Constants::BUSINESS_OWNER)
       response[:isBusinessEmployee] = true

@@ -3,7 +3,7 @@ class Api::V1::Orders::OrdersController < ApplicationController
 
 	def create
 		order = Order.new(order_params)
-		if charge_exist(@current_user, Constants::FREPI_ADMIN)
+		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			order.pay_mode = params[:pay_mode]
 			order.status = params[:status]
 			order.due = params[:due]

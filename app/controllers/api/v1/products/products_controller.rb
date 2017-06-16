@@ -11,7 +11,7 @@ class Api::V1::Products::ProductsController < ApplicationController
 	end
 
 	def create
-		if charge_exist(@current_user, Constants::FREPI_ADMIN)
+		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			product = Product.new(products_params)
 			product.downcase_fields
 			if product.save

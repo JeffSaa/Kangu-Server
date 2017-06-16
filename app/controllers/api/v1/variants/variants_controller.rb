@@ -2,7 +2,7 @@ class Api::V1::Variants::VariantsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
 	def create
-		if charge_exist(@current_user, Constants::FREPI_SUPERVISOR)
+		if charge_exist(@current_user, Constants::KANGU_SUPERVISOR)
 			variant = ProductVariant.new(variant_params)
 			variant.downcase_fields
 			if variant.save
