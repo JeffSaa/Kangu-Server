@@ -47,10 +47,14 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		order = Order.find(params[:id])
 		if order.status < 3 and order.update(status: order.status+1)
 			if order.status == 2
+				total = 0
 				products = OrderProduct.where(order_id: order.id)
 				products.each do |p|
-					p.update(price: get_product_price(ProductVariant.find(p.variant_id)))
+					if p.update(price: get_product_price(ProductVariant.find(p.variant_id)))
+						total += p.price * p.quantity
+					end					
 				end
+				order.update(consecutive: Order.where(status: 3).count + Order.where(status: 2).count + 1, total: total)
 			end
 			render :json => order, status: :ok
 		end

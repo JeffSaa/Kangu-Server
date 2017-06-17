@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616180714) do
+ActiveRecord::Schema.define(version: 20170617181916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,14 +83,14 @@ ActiveRecord::Schema.define(version: 20170616180714) do
     t.integer  "order_type",   default: 0
     t.boolean  "isLate",       default: false
     t.float    "calification", default: 0.0
-    t.float    "paid",         default: 0.0
-    t.float    "due",          default: 0.0
     t.integer  "pay_mode",     default: 0
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
     t.string   "comment"
     t.datetime "datehour"
     t.integer  "target_id"
+    t.integer  "consecutive"
+    t.float    "total",        default: 0.0
   end
 
   create_table "product_groups", force: :cascade do |t|
@@ -115,17 +115,18 @@ ActiveRecord::Schema.define(version: 20170616180714) do
     t.float    "natural_percent"
     t.float    "natural_gain"
     t.float    "unit_measurement", default: 0.0
+    t.integer  "enabled",          default: 0
   end
 
   create_table "products", force: :cascade do |t|
     t.string   "name"
-    t.boolean  "enabled",             default: true
     t.datetime "created_at",                                                null: false
     t.datetime "updated_at",                                                null: false
     t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
     t.integer  "measurement_type"
     t.integer  "measurement_variant"
     t.integer  "subcategorie_id"
+    t.integer  "enabled",             default: 0
   end
 
   create_table "tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
