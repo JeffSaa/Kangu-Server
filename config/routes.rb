@@ -48,6 +48,7 @@ Rails.application.routes.draw do
 				post :disable, to: :disable, controller: :orders
 				put :update_status, to: :update_status, controller: :orders
 				get :day_shop, to: :day_shop, controller: :orders
+				get :find_by_consecutive, to: :find_by_consecutive, controller: :orders
 			end
 
 			namespace :users do

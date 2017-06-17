@@ -44,9 +44,11 @@ class Api::V1::Orders::OrdersController < ApplicationController
 	end
 
 	def show
-		products = []
-		OrderProduct.where(order_id: params[:id]).each{|p| products << get_orderproduct_info(p)}
-		render :json => {order: Order.find(params[:id]), products: products}, status: :ok
+		render :json => get_order_details(Order.find(params[:id])), status: :ok
+	end
+
+	def find_by_consecutive
+		render :json => get_order_details(Order.find_by(consecutive: params[:consecutive])), status: :ok
 	end
 
 	def advance
@@ -124,6 +126,12 @@ class Api::V1::Orders::OrdersController < ApplicationController
 
 	def orderproduct_params(p)
 		p.permit(:comment, :quantity, :variant_id)
+	end
+
+	def get_order_details(order)
+		products = []
+		OrderProduct.where(order_id: order.id).each{|p| products << get_orderproduct_info(p)}
+		return {order: Order.find(order.id), products: products}
 	end
 
 end
