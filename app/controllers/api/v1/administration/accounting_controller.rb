@@ -13,8 +13,10 @@ class Api::V1::Administration::AccountingController < ApplicationController
 			CreditNote.where(order_id: o.id).each do |cn|
 				items = []
 				CreditNoteItem.where(note_id: cn).each do |cni|
-					variant = ProductVariant.find(cni.product_id)
-					items << {item: cni, variant: variant}
+					order_product = OrderProduct.find(cni.product_id)
+					variant = ProductVariant.find(order_product.variant_id)
+					product = Product.find(variant.product_id)
+					items << {item: cni, variant: variant, product: product, order_product: order_product}
 				end
 				notes << {credit_note: cn, notes: items}
 			end
