@@ -11,8 +11,12 @@ class Api::V1::Administration::AccountingController < ApplicationController
 			response[:total] += o.total
 			notes = []
 			CreditNote.where(order_id: o.id).each do |cn|
-				notes_items = CreditNotesItems.where(note_id: notes)
-				notes << {credit_note: cn, notes: notes_items}
+				items = []
+				CreditNoteItem.where(note_id: cn).each do |cni|
+					variant = ProductVariant.find(cni.product_id)
+					items << {item: cni, variant: variant}
+				end
+				notes << {credit_note: cn, notes: items}
 			end
 			response[:model] << {order: o, order_products: products, credit_notes: notes}
 		end

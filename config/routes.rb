@@ -59,6 +59,10 @@ Rails.application.routes.draw do
 				post :close_day, to: :close_day, controller: :accounting
 			end
 
+			namespace :creditnote do
+				resources :creditnote, format: :json
+			end
+
 		end
 	end
 
