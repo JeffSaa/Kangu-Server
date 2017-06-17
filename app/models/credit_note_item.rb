@@ -1,0 +1,2 @@
+class CreditNoteItem < ApplicationRecord
+end

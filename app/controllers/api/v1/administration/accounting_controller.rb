@@ -6,9 +6,15 @@ class Api::V1::Administration::AccountingController < ApplicationController
 		day = DateTime.parse params[:day]
 		orders = Order.where(status: 3).where('datehour BETWEEN ? AND ?', day.beginning_of_day, day.end_of_day)
 		orders.each do |o|
-			products = OrderProduct.where(order_id: o.id)
+			products = []
+			OrderProduct.where(order_id: o.id).each{|op| products << get_orderproduct_info(op)}
 			response[:total] += o.total
-			response[:model] << {order: o, order_products: products}
+			notes = []
+			CreditNote.where(order_id: o.id).each do |cn|
+				notes_items = CreditNotesItems.where(note_id: notes)
+				notes << {credit_note: cn, notes: notes_items}
+			end
+			response[:model] << {order: o, order_products: products, credit_notes: notes}
 		end
 		render :json => response, status: :ok
 	end
