@@ -64,6 +64,10 @@ Rails.application.routes.draw do
 				resources :creditnote, format: :json
 			end
 
+			namespace :providers do
+				resources :providers, format: :json
+			end
+
 		end
 	end
 

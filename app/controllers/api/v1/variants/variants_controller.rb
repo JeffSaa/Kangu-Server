@@ -6,8 +6,14 @@ class Api::V1::Variants::VariantsController < ApplicationController
 			variant = ProductVariant.new(variant_params)
 			variant.downcase_fields
 			if variant.save
-				upload_blob("variant", params[:photo], variant.id)
-				render :json => variant, status: :ok
+				params[:type_id] = Constants::KANGU_PROVIDER
+				params[:user_id] = params[:provider_id]
+				params[:target_id] = variant.id
+				charge = create_charge()
+				if charge.save
+					#upload_blob("variant", params[:photo], variant.id)
+					render :json => {variant: variant, charge: charge}, status: :ok
+				end
 			end
 		end
 	end
@@ -25,7 +31,7 @@ class Api::V1::Variants::VariantsController < ApplicationController
 
 	def variant_params
 		params.permit(:name, :entry_price, :natural_percent, :natural_gain, :business_percent, :business_gain, :coin_price,
-			:discount, :subcategorie_id, :measurement_type, :measurement_variant, :unit_measurement, :default_quantity, :product_id)
+			:discount, :unit_measurement, :default_quantity, :product_id)
 	end
 
 end

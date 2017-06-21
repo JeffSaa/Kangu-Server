@@ -11,7 +11,7 @@ class Api::V1::Users::UsersController < ApplicationController
 		users = []
 		if params[:search].length > 0
 			q = params[:search].downcase
-			users = User.where('name LIKE ?', "%#{params[:search]}%")
+			users = User.where('email LIKE ?', "%#{params[:search]}%")
 		end
 		render :json => {model: users}, status: :ok
 	end

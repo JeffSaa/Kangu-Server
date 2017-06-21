@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170617191244) do
+ActiveRecord::Schema.define(version: 20170621000523) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20170617191244) do
     t.integer  "variant_id"
     t.integer  "status",        default: 0
     t.float    "last_quantity", default: 0.0
+    t.integer  "provider_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -143,6 +144,13 @@ ActiveRecord::Schema.define(version: 20170617191244) do
     t.integer  "measurement_variant"
     t.integer  "subcategorie_id"
     t.integer  "enabled",             default: 0
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tokens", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
