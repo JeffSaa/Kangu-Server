@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 
 			namespace :providers do
 				resources :providers, format: :json
+				post :search, to: :search, controller: :providers
 			end
 
 		end

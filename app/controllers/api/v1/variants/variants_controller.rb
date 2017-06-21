@@ -11,7 +11,7 @@ class Api::V1::Variants::VariantsController < ApplicationController
 				params[:target_id] = variant.id
 				charge = create_charge()
 				if charge.save
-					#upload_blob("variant", params[:photo], variant.id)
+					upload_blob("variant", params[:photo], variant.id)
 					render :json => {variant: variant, charge: charge}, status: :ok
 				end
 			end
