@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170621000523) do
+ActiveRecord::Schema.define(version: 20170623181447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -133,17 +133,17 @@ ActiveRecord::Schema.define(version: 20170621000523) do
     t.float    "natural_gain"
     t.float    "unit_measurement", default: 0.0
     t.integer  "enabled",          default: 0
+    t.string   "description"
   end
 
   create_table "products", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
-    t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
+    t.uuid     "uuid",             default: -> { "uuid_generate_v4()" }
     t.integer  "measurement_type"
-    t.integer  "measurement_variant"
     t.integer  "subcategorie_id"
-    t.integer  "enabled",             default: 0
+    t.integer  "enabled",          default: 0
   end
 
   create_table "providers", force: :cascade do |t|
