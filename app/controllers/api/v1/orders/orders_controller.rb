@@ -18,6 +18,7 @@ class Api::V1::Orders::OrdersController < ApplicationController
 				op.price = get_product_price(ProductVariant.find(op.variant_id))
 				op.order_id = order.id
 				op.last_quantity = op.quantity
+				op.provider_id = getProvider(p[:variant_id], order.target_id, order.order_type).last[:provider].id
 				if op.save
 					response[:products] << op
 				end
@@ -56,7 +57,8 @@ class Api::V1::Orders::OrdersController < ApplicationController
 				total = 0
 				products = OrderProduct.where(order_id: order.id)
 				products.each do |p|
-					if p.update(price: get_product_price(ProductVariant.find(p.variant_id)))
+					variant = ProductVariant.find(p.variant_id)
+					if p.update(price: get_product_price(variant), iva: variant.iva)
 						total += p.price * p.quantity
 					end					
 				end

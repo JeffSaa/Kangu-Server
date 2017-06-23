@@ -113,6 +113,15 @@ class ApplicationController < ActionController::Base
 		return {order_product: op, variant: variant, product: product}
 	end
 
+	def getProvider(p, target, type)
+		providers = []
+		Charge.where(type_id: Constants::KANGU_PROVIDER, target_id: p).each do |c|
+			user = User.find(c.user_id)
+			providers << {user: user, provider: Provider.find_by(user_id: user.id)}
+		end
+		return providers
+	end
+
 	private 
 
 	def charge_params

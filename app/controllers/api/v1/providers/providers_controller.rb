@@ -28,7 +28,7 @@ class Api::V1::Providers::ProvidersController < ApplicationController
 	private
 
 	def provider_params
-		params.permit(:name, :variant_id, :user_id)
+		params.permit(:name, :user_id)
 	end
 
 end
