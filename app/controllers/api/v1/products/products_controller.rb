@@ -15,7 +15,6 @@ class Api::V1::Products::ProductsController < ApplicationController
 			product = Product.new(products_params)
 			product.downcase_fields
 			if product.save
-				#upload_blob("product", params[:photo], product.id)
 				render :json => {response: product}, status: :ok
 			end
 		end

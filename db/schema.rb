@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170623181447) do
+ActiveRecord::Schema.define(version: 20170623221516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20170623181447) do
     t.integer  "status",        default: 0
     t.float    "last_quantity", default: 0.0
     t.integer  "provider_id"
+    t.float    "iva"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -134,6 +135,7 @@ ActiveRecord::Schema.define(version: 20170623181447) do
     t.float    "unit_measurement", default: 0.0
     t.integer  "enabled",          default: 0
     t.string   "description"
+    t.float    "iva"
   end
 
   create_table "products", force: :cascade do |t|

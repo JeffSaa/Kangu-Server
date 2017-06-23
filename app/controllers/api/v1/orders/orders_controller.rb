@@ -6,8 +6,6 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			order.pay_mode = params[:pay_mode]
 			order.status = params[:status]
-			order.due = params[:due]
-			order.paid = params[:paid]
 			order.target_id = params[:target_id]
 			order.order_type = params[:order_type]
 		else
