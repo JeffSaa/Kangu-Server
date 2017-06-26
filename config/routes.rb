@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 			namespace :variants do
 				resources :variants, format: :json
 				post :search, to: :search, controller: :variants
+				post :excel_updater, to: :excel_updater, controller: :variants
 			end
 
 			namespace :categories do
