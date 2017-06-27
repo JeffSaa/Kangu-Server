@@ -63,6 +63,8 @@ class Api::V1::Orders::OrdersController < ApplicationController
 					end					
 				end
 				order.update(consecutive: Order.where(status: 3).count + Order.where(status: 2).count + 1, total: total)
+				sucursal = BusinessSucursal.find(order.target_id)
+				sucursal.update(order_count: sucursal.order_count + 1)
 			end
 			render :json => order, status: :ok
 		end
