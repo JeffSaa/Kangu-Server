@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170623221516) do
+ActiveRecord::Schema.define(version: 20170627163604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20170623221516) do
     t.integer  "address_latitude"
     t.integer  "address_longitude"
     t.integer  "coins",               default: 0
+    t.integer  "order_count",         default: 0
   end
 
   create_table "categories", force: :cascade do |t|
@@ -184,6 +185,7 @@ ActiveRecord::Schema.define(version: 20170623221516) do
     t.string   "lastname"
     t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
     t.bigint   "phone",               default: 0
+    t.integer  "order_count",         default: 0
   end
 
 end
