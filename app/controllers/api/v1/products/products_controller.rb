@@ -2,7 +2,7 @@ class Api::V1::Products::ProductsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product]
 
 	def index
-		render :json => {model: Product.all}, status: :ok
+		render :json => {model: Product.all.order(:name)}, status: :ok
 	end
 
 	def show

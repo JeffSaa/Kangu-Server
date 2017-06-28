@@ -1,8 +1,17 @@
 class Constants
+
+	# Paginations
 	PRODUCT_PER_PAGE = 20
-	CREDIT_DAY = 7
+
+	# Paymodes
+	PAY_MODE_CASH = 0
+	PAY_MODE_CREDIT_BUSINESS = 1
+
+	# Credit pay_mode
 	CREDIT_EXTRA_DAY = 20
 	CREDIT_INTEREST_PERCENT = 3
+
+	# Charges
 	USER_HOME = 501
 	KANGU_ADMIN = 101
 	KANGU_SUPERVISOR = 102
@@ -11,4 +20,5 @@ class Constants
 	BUSINESS_ADMIN = 302
 	BUSINESS_CHEF = 303
 	BUSINESS_OPERATOR = 304
+
 end
