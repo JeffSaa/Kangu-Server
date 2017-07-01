@@ -11,7 +11,12 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 	end
 
 	def create
-		place = BusinessPlace.new(place_params)
+		chargeAdmin = charge_exist(@current_user, Constants::KANGU_ADMIN)
+		if chargeAdmin
+			place = BusinessPlace.new(kangu_admin_place_params)
+		else
+			place = BusinessPlace.new(place_params)
+		end
 		place.downcase_fields
 		if place.save
 			if params[:photo]
@@ -20,13 +25,23 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 			charge = create_charge()
 			charge.target_id = place.id
 			charge.type_id = Constants::BUSINESS_OWNER
-			if not charge_exist(@current_user, Constants::KANGU_ADMIN)
+			if not chargeAdmin
 				charge.user_id = @current_user.id
 			end
 			if charge.save
 				render :json => {charge: charge, businessplace: place}, status: :ok
 			end
 		end
+	end
+
+	def update
+		place = BusinessPlace.find(params[:id])
+		if charge_exist(@current_user, Constants::KANGU_ADMIN)
+			place.update(kangu_admin_place_params)
+		else
+			place.update(place_params)
+		end
+		render :json => place, status: :ok
 	end
 
 	def show
@@ -46,6 +61,10 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 
 	def place_params
 		params.permit(:name)
+	end
+
+	def kangu_admin_place_params
+		params.permit(:name, :credit_term, :credit_fit, :current_deb, :credit_active)
 	end
 
 end

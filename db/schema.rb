@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170627163604) do
+ActiveRecord::Schema.define(version: 20170701165833) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,8 +18,12 @@ ActiveRecord::Schema.define(version: 20170627163604) do
 
   create_table "business_places", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "credit_term",   default: 0
+    t.float    "credit_fit",    default: 0.0
+    t.float    "current_deb",   default: 0.0
+    t.boolean  "credit_active", default: false
   end
 
   create_table "business_products", force: :cascade do |t|
@@ -98,18 +102,22 @@ ActiveRecord::Schema.define(version: 20170627163604) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "status",       default: 0
-    t.integer  "order_type",   default: 0
-    t.boolean  "isLate",       default: false
-    t.float    "calification", default: 0.0
-    t.integer  "pay_mode",     default: 0
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.integer  "status",            default: 0
+    t.integer  "order_type",        default: 0
+    t.boolean  "isLate",            default: false
+    t.float    "calification",      default: 0.0
+    t.integer  "pay_mode",          default: 0
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "comment"
     t.datetime "datehour"
     t.integer  "target_id"
     t.integer  "consecutive"
-    t.float    "total",        default: 0.0
+    t.float    "total",             default: 0.0
+    t.float    "credit_interest",   default: 0.0
+    t.date     "pay_day"
+    t.date     "next_interest_day"
+    t.integer  "interest_count",    default: 0
   end
 
   create_table "product_groups", force: :cascade do |t|
