@@ -2,29 +2,52 @@ class Api::V1::Orders::OrdersController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create
+		total = 0
+		ops = []
 		order = Order.new(order_params)
 		if charge_exist(@current_user, Constants::KANGU_ADMIN)
-			order.pay_mode = params[:pay_mode]
 			order.status = params[:status]
 			order.target_id = params[:target_id]
-			order.order_type = params[:order_type]
 		else
 			order.target_id = @current_user.id
 		end
 		response = {order_info: order, products: []}
-		if order.save
-			params[:products].each do |p|
-				op = OrderProduct.new(orderproduct_params(p))
-				op.price = get_product_price(ProductVariant.find(op.variant_id))
-				op.order_id = order.id
-				op.last_quantity = op.quantity
-				op.provider_id = getProvider(p[:variant_id], order.target_id, order.order_type).last[:provider].id
-				if op.save
-					response[:products] << op
+		params[:products].each do |p|
+			op = OrderProduct.new(orderproduct_params(p))
+			op.price = get_product_price(ProductVariant.find(op.variant_id))
+			total += op.price * op.quantity
+			op.last_quantity = op.quantity
+			op.provider_id = getProvider(p[:variant_id], order.target_id, order.order_type).last[:provider].id
+			ops << op
+		end
+		if order.order_type == 0 and order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS 
+			show_console("sii")
+			sucursal = BusinessSucursal.find(order.target_id)
+			place = BusinessPlace.find(sucursal.business_id)
+			if total + place.current_deb <= place.credit_fit and place.credit_active
+				place.update(current_deb: total + place.current_deb)
+				if order.save
+					ops.each do |p|
+						p.order_id = order.id
+						if p.save
+							response[:products] << p
+						end
+						render :json => response, status: :ok
+					end
+				end
+			end
+		else
+			show_console("nooo")
+			if order.save
+				ops.each do |p|
+					p.order_id = order.id
+					if p.save
+						response[:products] << p
+					end
+					render :json => response, status: :ok
 				end
 			end
 		end
-		render :json => response, status: :ok
 	end
 
 	def index
@@ -53,25 +76,34 @@ class Api::V1::Orders::OrdersController < ApplicationController
 
 	def advance
 		order = Order.find(params[:id])
-		if order.status < 3 and order.update(status: order.status+1)
-			if order.status == 2
-				total = 0
-				products = OrderProduct.where(order_id: order.id)
-				products.each do |p|
-					variant = ProductVariant.find(p.variant_id)
-					if p.update(price: get_product_price(variant), iva: variant.iva)
-						total += p.price * p.quantity
-					end					
-				end
-				sucursal = BusinessSucursal.find(order.target_id)
-				sucursal.update(order_count: sucursal.order_count + 1)
-				place = BusinessPlace.find(sucursal.business_id)
-				pay_day = Date.today + place.credit_term
-				consecutive = Order.where(status: 3).count + Order.where(status: 2).count + 1
-				order.update(consecutive: consecutive, total: total, credit_interest: Constants::CREDIT_INTEREST_PERCENT,
-					pay_day: pay_day, next_interest_day: pay_day + Constants::CREDIT_EXTRA_DAY)
+		if order.status < 1 
+			if order.update(status: order.status+1)
+				render :json => order, status: :ok
 			end
-			render :json => order, status: :ok
+		elsif order.status == 1
+			total = 0
+			products = OrderProduct.where(order_id: order.id)
+			products.each do |p|
+				variant = ProductVariant.find(p.variant_id)
+				if p.update(price: get_product_price(variant), iva: variant.iva)
+					total += p.price * p.quantity
+				end
+			end
+			sucursal = BusinessSucursal.find(order.target_id)
+			sucursal.update(order_count: sucursal.order_count + 1)
+			consecutive = Order.where(status: 3).count + Order.where(status: 2).count + 1
+			if order.order_type == 0 and order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS
+				place = BusinessPlace.find(sucursal.business_id)
+				deb = place.current_deb + total - order.total
+				place.update(current_deb: deb)
+				pay_day = Date.today + place.credit_term
+				order.update(consecutive: consecutive, total: total, credit_interest: Constants::CREDIT_INTEREST_PERCENT,
+					pay_day: pay_day, next_interest_day: pay_day + Constants::CREDIT_EXTRA_DAY, status: order.status+1)
+				render :json => order, status: :ok
+			else
+				order.update(consecutive: consecutive, total: total, status: order.status+1)
+				render :json => order, status: :ok
+			end
 		end
 	end
 
@@ -128,7 +160,7 @@ class Api::V1::Orders::OrdersController < ApplicationController
 	end
 
 	def order_params
-		params.permit(:comment, :datehour)
+		params.permit(:comment, :datehour, :order_type, :pay_mode)
 	end
 
 	def orderproduct_params(p)
