@@ -3,7 +3,12 @@ class Api::V1::Users::UsersController < ApplicationController
 
 	def index
 		if charge_exist(@current_user, Constants::KANGU_ADMIN)
-			render :json => {model: User.all}, status: :ok
+			response = User.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
+			set_paginate_header(Constants::ITEMS_PER_PAGE, response, params[:page])
+			render :json => {model: response}, status: :ok
+			#products = Product.where("name like '#{q}%'").paginate(:per_page => Constants::PRODUCT_PER_PAGE,
+			#:page => params[:page])
+		#set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
 		end
 	end
 

@@ -1,7 +1,7 @@
 class Constants
 
 	# Paginations
-	PRODUCT_PER_PAGE = 20
+	ITEMS_PER_PAGE = 20
 
 	# Paymodes
 	PAY_MODE_CASH = 0

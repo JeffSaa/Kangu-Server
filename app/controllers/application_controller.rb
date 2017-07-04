@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 		render :json => response, status: :ok
 	end
 
-	def set_paginate_header(response, per_page, model, current_page)
+	def set_paginate_header(per_page, model, current_page)
 		self.headers['products_per_page'] = per_page
 		self.headers['current_page'] = current_page ||= 1
 		self.headers['pages_count'] = model.total_pages
