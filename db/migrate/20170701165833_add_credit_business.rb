@@ -8,7 +8,8 @@ class AddCreditBusiness < ActiveRecord::Migration[5.0]
   	add_column :orders, :credit_interest, :float, :default => 0
   	add_column :orders, :pay_day, :date
   	add_column :orders, :next_interest_day, :date
-	add_column :orders, :interest_count, :integer, :default => 0
+    add_column :orders, :interest_count, :integer, :default => 0
+    add_column :orders, :is_payed, :boolean, :default => false
   end
 
 end

@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20170702002602) do
     t.date     "pay_day"
     t.date     "next_interest_day"
     t.integer  "interest_count",    default: 0
+    t.boolean  "is_payed",          default: false
   end
 
   create_table "product_groups", force: :cascade do |t|
