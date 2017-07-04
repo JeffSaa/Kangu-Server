@@ -12,7 +12,7 @@ module KanguServer
         resource '*',
         :headers => :any,
         :expose  => ['current_page', 'pages_count', 'products_per_page', 'total_entries'],
-        :methods => [:get, :post, :delete, :options]
+        :methods => [:get, :post, :delete, :put]
       end
     end
   end
