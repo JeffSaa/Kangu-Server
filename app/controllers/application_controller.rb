@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def get_product_price(p)
-		return p[:entry_price] + p[:business_gain] + p[:entry_price] * (p[:business_percent] / 10)
+		return p[:entry_price] * p[:business_percent] / 100 + p[:entry_price] + p[:business_gain]
 	end
 
 	def render_response_json(code, status)
@@ -99,6 +99,10 @@ class ApplicationController < ActionController::Base
 			admins << User.find(c.user_id)
 		end
 		return admins
+	end
+
+	def getSucursalPlace(id)
+		return BusinessPlace.find(BusinessSucursal.find(id).business_id)
 	end
 
 	def show_console(o)

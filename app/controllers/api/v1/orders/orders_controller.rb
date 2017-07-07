@@ -2,9 +2,8 @@ class Api::V1::Orders::OrdersController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create
-		total = 0
-		ops = []
 		order = Order.new(order_params)
+		can_save = false
 		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			order.status = params[:status]
 			order.target_id = params[:target_id]
@@ -15,38 +14,33 @@ class Api::V1::Orders::OrdersController < ApplicationController
 		params[:products].each do |p|
 			op = OrderProduct.new(orderproduct_params(p))
 			op.price = get_product_price(ProductVariant.find(op.variant_id))
-			total += op.price * op.quantity
+			order.total += op.price * op.quantity
 			op.last_quantity = op.quantity
+			op.order_id = order.id
+			op.iva = ProductVariant.find(p[:variant_id]).iva
 			op.provider_id = getProvider(p[:variant_id], order.target_id, order.order_type).last[:provider].id
-			ops << op
+			response[:products] << op
 		end
-		if order.order_type == 0 and order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS 
-			show_console("sii")
-			sucursal = BusinessSucursal.find(order.target_id)
-			place = BusinessPlace.find(sucursal.business_id)
-			if total + place.current_deb <= place.credit_fit and place.credit_active
-				place.update(current_deb: total + place.current_deb)
-				if order.save
-					ops.each do |p|
-						p.order_id = order.id
-						if p.save
-							response[:products] << p
-						end
-						render :json => response, status: :ok
-					end
+		case order.order_type
+		when 0
+			if order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS
+				place = getSucursalPlace(order.target_id)
+				if place.current_deb + order.total <= place.credit_fit and place.credit_active
+					place.update(current_deb: place.current_deb + order.total)
+					can_save = true
 				end
+			else
+				can_save = true
 			end
+		end
+		if can_save and order.save
+			response[:products].each do |p|
+				p.order_id = order.id
+				p.save
+			end
+			render :json => response, status: :ok
 		else
-			show_console("nooo")
-			if order.save
-				ops.each do |p|
-					p.order_id = order.id
-					if p.save
-						response[:products] << p
-					end
-					render :json => response, status: :ok
-				end
-			end
+			render :json => response, status: :bad_request
 		end
 	end
 
