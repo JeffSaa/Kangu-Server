@@ -61,6 +61,7 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.4)
+    convertloop (0.1.2)
     debug_inspector (0.0.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -92,6 +93,7 @@ GEM
     minitest (5.10.1)
     multi_json (1.12.1)
     multipart-post (2.0.0)
+    net_http_ssl_fix (0.0.8)
     nio4r (1.2.1)
     nokogiri (1.7.0.1)
       mini_portile2 (~> 2.1.0)
@@ -179,8 +181,10 @@ DEPENDENCIES
   azure-storage
   byebug
   coffee-rails (~> 4.2)
+  convertloop (= 0.1.2)
   jbuilder (~> 2.5)
   jquery-rails
+  net_http_ssl_fix
   pg (~> 0.18)
   puma (~> 3.0)
   rack-cors

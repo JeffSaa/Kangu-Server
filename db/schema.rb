@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170702002602) do
+ActiveRecord::Schema.define(version: 20170707192646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,13 @@ ActiveRecord::Schema.define(version: 20170702002602) do
 
   create_table "business_places", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.integer  "credit_term",   default: 0
     t.float    "credit_fit",    default: 0.0
     t.float    "current_deb",   default: 0.0
     t.boolean  "credit_active", default: false
+    t.uuid     "uid",           default: -> { "uuid_generate_v4()" }
   end
 
   create_table "business_products", force: :cascade do |t|
@@ -37,8 +38,8 @@ ActiveRecord::Schema.define(version: 20170702002602) do
 
   create_table "business_sucursals", force: :cascade do |t|
     t.integer  "business_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
     t.string   "name"
     t.string   "address_description"
     t.integer  "address_latitude"
@@ -46,6 +47,7 @@ ActiveRecord::Schema.define(version: 20170702002602) do
     t.integer  "coins",               default: 0
     t.integer  "order_count",         default: 0
     t.bigint   "phone",               default: 0
+    t.uuid     "uid",                 default: -> { "uuid_generate_v4()" }
   end
 
   create_table "categories", force: :cascade do |t|

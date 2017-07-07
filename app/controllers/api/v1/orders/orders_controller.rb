@@ -90,7 +90,7 @@ class Api::V1::Orders::OrdersController < ApplicationController
 				place = BusinessPlace.find(sucursal.business_id)
 				deb = place.current_deb + total - order.total
 				place.update(current_deb: deb)
-				pay_day = Date.today + place.credit_term
+				pay_day = order.datehour.to_date + place.credit_term
 				order.update(consecutive: consecutive, total: total, credit_interest: Constants::CREDIT_INTEREST_PERCENT,
 					pay_day: pay_day, next_interest_day: pay_day + Constants::CREDIT_EXTRA_DAY, status: order.status+1)
 				render :json => order, status: :ok
