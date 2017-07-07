@@ -12,7 +12,7 @@ class Api::V1::Variants::VariantsController < ApplicationController
 	end
 
 	def create
-		if charge_exist(@current_user, Constants::KANGU_SUPERVISOR)
+		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			variant = ProductVariant.new(variant_params)
 			variant.downcase_fields
 			if variant.save

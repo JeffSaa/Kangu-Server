@@ -1,8 +1,10 @@
 class Api::V1::Products::ProductsController < ApplicationController
-	before_action :validate_authentification_token, :except => [:search_product]
+	before_action :validate_authentification_token, :except => [:search_product, :index]
 
 	def index
-		render :json => {model: Product.all.order(:name)}, status: :ok
+		#response = Product.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
+		#set_paginate_header(Constants::ITEMS_PER_PAGE, response, params[:page])
+		render :json => {model: Product.all}, status: :ok
 	end
 
 	def show

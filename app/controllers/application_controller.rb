@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
 	end
 
 	def set_paginate_header(per_page, model, current_page)
-		self.headers['products_per_page'] = per_page
+		self.headers['entries_per_page'] = per_page
 		self.headers['current_page'] = current_page ||= 1
 		self.headers['pages_count'] = model.total_pages
 		self.headers['total_entries'] = model.total_entries
