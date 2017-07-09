@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 			namespace :businessplace do
 				resources :businessplace, format: :json
 				post :search, to: :search, controller: :businessplace
+				post :credit_status, to: :credit_status, controller: :businessplace
 			end
 
 			namespace :businesssucursal do

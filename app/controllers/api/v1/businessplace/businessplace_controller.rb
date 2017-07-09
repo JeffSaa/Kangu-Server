@@ -1,5 +1,5 @@
 class Api::V1::Businessplace::BusinessplaceController < ApplicationController
-	before_action :validate_authentification_token
+	before_action :validate_authentification_token, :except => [:credit_status]
 
 	def index
 		response = []
@@ -53,6 +53,20 @@ class Api::V1::Businessplace::BusinessplaceController < ApplicationController
 		response = []
 		if params[:search].length > 0
 			response = BusinessPlace.where('name LIKE ?', "%#{params[:search]}%")
+		end
+		render :json => response, status: :ok
+	end
+
+	def credit_status
+		place = BusinessPlace.find_by(uid: params[:uid])
+		response = {place: place, total_expired: 0, orders: []}
+		BusinessSucursal.where(business_id: place.id).each do |b|
+			Order.where(order_type: 0, target_id: b.id, pay_mode: Constants::PAY_MODE_CREDIT_BUSINESS, is_payed: false). each do |o|
+				if o.interest_count > 0
+					response[:total_expired] += o.total * Constants::CREDIT_INTEREST_PERCENT / 100 * interest_count + o.total
+				end
+				response[:orders] << {sucursal: b, order: o}
+			end
 		end
 		render :json => response, status: :ok
 	end
