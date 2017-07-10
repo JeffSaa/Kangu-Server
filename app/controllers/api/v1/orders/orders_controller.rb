@@ -1,5 +1,5 @@
 class Api::V1::Orders::OrdersController < ApplicationController
-	before_action :validate_authentification_token
+	before_action :validate_authentification_token, :except => [:show_by_uid]
 
 	def create
 		order = Order.new(order_params)
@@ -137,6 +137,14 @@ class Api::V1::Orders::OrdersController < ApplicationController
 			response << {variant: variant, product: Product.find(variant.product_id), provider: getProvider(variant.id, nil, nil).last, duplicates: d,
 				quantity: d.inject(0){|sum,e| sum + e.quantity}}
 		end
+		render :json => response, status: :ok
+	end
+
+	def show_by_uid
+		order = Order.find_by(uid: params[:uid])
+		sucursal = BusinessSucursal.find(order.target_id)
+		place = BusinessPlace.find(sucursal.business_id)
+		response = {order: order, sucursal: sucursal, place: place}
 		render :json => response, status: :ok
 	end
 

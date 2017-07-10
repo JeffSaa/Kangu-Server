@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170707192646) do
+ActiveRecord::Schema.define(version: 20170709235053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,8 +109,8 @@ ActiveRecord::Schema.define(version: 20170707192646) do
     t.boolean  "isLate",            default: false
     t.float    "calification",      default: 0.0
     t.integer  "pay_mode",          default: 0
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.string   "comment"
     t.datetime "datehour"
     t.integer  "target_id"
@@ -121,6 +121,7 @@ ActiveRecord::Schema.define(version: 20170707192646) do
     t.date     "next_interest_day"
     t.integer  "interest_count",    default: 0
     t.boolean  "is_payed",          default: false
+    t.uuid     "uid",               default: -> { "uuid_generate_v4()" }
   end
 
   create_table "product_groups", force: :cascade do |t|
