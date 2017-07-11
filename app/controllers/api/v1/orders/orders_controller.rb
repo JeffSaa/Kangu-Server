@@ -142,10 +142,21 @@ class Api::V1::Orders::OrdersController < ApplicationController
 
 	def show_by_uid
 		order = Order.find_by(uid: params[:uid])
-		products = OrderProduct.where(order_id: order.id)
+		products = []
+		order_products = OrderProduct.where(order_id: order.id)
+		order_products.each do |op|
+			variant = ProductVariant.find(op.variant_id)
+			products << {order_product: op, variant: variant, product: Product.find(variant.product_id)}
+		end
+		iva = []
+		[0, 0.05, 0.16].each do |i|
+			total = 0
+			order_products.where(iva: i).each{|op| total += op.price * op.quantity}
+			iva << [total , total * i]
+		end
 		sucursal = BusinessSucursal.find(order.target_id)
 		place = BusinessPlace.find(sucursal.business_id)
-		response = {order: order, products: products, sucursal: sucursal, place: place}
+		response = {order: order, products: products, sucursal: sucursal, place: place, iva: iva}
 		render :json => response, status: :ok
 	end
 
