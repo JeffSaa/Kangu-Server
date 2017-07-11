@@ -1,4 +1,4 @@
-class Api::V1::Userapp::LogoutController < ApplicationController
+class V1::Userapp::LogoutController < ApplicationController
 
 	def destroy
 		token = Token.find_by(id: params[:id])

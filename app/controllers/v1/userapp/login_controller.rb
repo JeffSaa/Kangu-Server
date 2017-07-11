@@ -1,4 +1,4 @@
-class Api::V1::Userapp::LoginController < ApplicationController
+class V1::Userapp::LoginController < ApplicationController
 
 	def create
 		password = SymmetricEncryption.encrypt params[:password]

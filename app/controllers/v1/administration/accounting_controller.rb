@@ -1,4 +1,4 @@
-class Api::V1::Administration::AccountingController < ApplicationController
+class V1::Administration::AccountingController < ApplicationController
 	before_action :validate_authentification_token
 
 	def close_day

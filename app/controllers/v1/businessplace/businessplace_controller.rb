@@ -1,4 +1,4 @@
-class Api::V1::Businessplace::BusinessplaceController < ApplicationController
+class V1::Businessplace::BusinessplaceController < ApplicationController
 	before_action :validate_authentification_token, :except => [:credit_status]
 
 	def index

@@ -1,4 +1,4 @@
-class Api::V1::Businesssucursal::BusinesssucursalController < ApplicationController
+class V1::Businesssucursal::BusinesssucursalController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create

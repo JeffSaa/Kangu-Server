@@ -1,4 +1,4 @@
-class Api::V1::Creditnote::CreditnoteController < ApplicationController
+class V1::Creditnote::CreditnoteController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create

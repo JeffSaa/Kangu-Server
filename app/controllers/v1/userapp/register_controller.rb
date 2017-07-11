@@ -1,4 +1,4 @@
-class Api::V1::Userapp::RegisterController < ApplicationController
+class V1::Userapp::RegisterController < ApplicationController
 
 	def register
 		user = User.new(user_params)

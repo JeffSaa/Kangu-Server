@@ -1,4 +1,4 @@
-class Api::V1::Providers::ProvidersController < ApplicationController
+class V1::Providers::ProvidersController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create

@@ -1,6 +1,4 @@
-class ApplicationController < ActionController::Base
-	protect_from_forgery with: :exception
-	skip_before_filter :verify_authenticity_token
+class ApplicationController < ActionController::API
 
 	def upload_blob(blob_name, file, id)
 		if Rails.env.production?

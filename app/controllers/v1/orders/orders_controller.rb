@@ -1,4 +1,4 @@
-class Api::V1::Orders::OrdersController < ApplicationController
+class V1::Orders::OrdersController < ApplicationController
 	before_action :validate_authentification_token, :except => [:show_by_uid]
 
 	def create

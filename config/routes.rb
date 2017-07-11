@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 	root 'welcome#index'
 
-	namespace :api do
 		namespace :v1 do
 
 			namespace :userapp do
@@ -73,6 +72,5 @@ Rails.application.routes.draw do
 			end
 
 		end
-	end
 
 end

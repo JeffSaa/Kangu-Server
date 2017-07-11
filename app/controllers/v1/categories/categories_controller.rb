@@ -1,4 +1,4 @@
-class Api::V1::Categories::CategoriesController < ApplicationController
+class V1::Categories::CategoriesController < ApplicationController
 	before_action :validate_authentification_token
 
 	def create

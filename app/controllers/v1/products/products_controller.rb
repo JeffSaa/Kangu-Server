@@ -1,4 +1,4 @@
-class Api::V1::Products::ProductsController < ApplicationController
+class V1::Products::ProductsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product, :index]
 
 	def index

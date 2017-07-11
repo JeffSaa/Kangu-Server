@@ -1,4 +1,4 @@
-class Api::V1::Users::UsersController < ApplicationController
+class V1::Users::UsersController < ApplicationController
 	before_action :validate_authentification_token
 
 	def index
