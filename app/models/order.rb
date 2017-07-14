@@ -8,7 +8,8 @@ class Order < ApplicationRecord
 			place.update(credit_active: false)
 			Charge.where(target_id: place.id, type_id: Constants::BUSINESS_OWNER).each do |ch|
 				user = User.find(ch.user_id)
-				ConvertLoop.people.create_or_update(email: user.email, first_name: user.name, last_name: user.lastname, total: 0, token: place.uid)
+				ConvertLoop.people.create_or_update(email: user.email, first_name: user.name, last_name: user.lastname,
+					total: 0, token: place.uid)
 				ConvertLoop.event_logs.send(name: "order-interest", person: { email: user.email })
 			end
 		end

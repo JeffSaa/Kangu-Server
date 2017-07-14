@@ -9,19 +9,10 @@ class V1::Userapp::RegisterController < ApplicationController
 			user.active = true
 		end
 		if user.save
-			ConvertLoop.people.create_or_update(email: user.email, first_name: user.name, last_name: user.lastname, token: user.uuid, total: 0)
 			render_user(user)
 		else
 			render_response_json(123, :bad_request)
 		end
-	end
-
-	def confirmation_email
-		user = User.find_by(uuid: params[:uuid])
-		if user
-			user.update(active: true)
-		end
-		render :json => user, status: :ok
 	end
 
 	private
