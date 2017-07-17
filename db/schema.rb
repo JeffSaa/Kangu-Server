@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170709235053) do
+ActiveRecord::Schema.define(version: 20170715193725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170709235053) do
     t.float    "current_deb",   default: 0.0
     t.boolean  "credit_active", default: false
     t.uuid     "uid",           default: -> { "uuid_generate_v4()" }
+    t.string   "nit"
   end
 
   create_table "business_products", force: :cascade do |t|
@@ -82,6 +83,19 @@ ActiveRecord::Schema.define(version: 20170709235053) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "inventory_entries", force: :cascade do |t|
+    t.date     "date"
+    t.string   "bill_number"
+    t.integer  "provider_id"
+    t.integer  "variant_id"
+    t.float    "quantity"
+    t.float    "unit_value"
+    t.boolean  "is_payed"
+    t.date     "pay_day"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "order_lists", force: :cascade do |t|
     t.string   "name"
     t.integer  "user_id"
@@ -101,6 +115,7 @@ ActiveRecord::Schema.define(version: 20170709235053) do
     t.float    "last_quantity", default: 0.0
     t.integer  "provider_id"
     t.float    "iva"
+    t.float    "discount",      default: 0.0
   end
 
   create_table "orders", force: :cascade do |t|
@@ -198,6 +213,18 @@ ActiveRecord::Schema.define(version: 20170709235053) do
     t.uuid     "uuid",                default: -> { "uuid_generate_v4()" }
     t.bigint   "phone",               default: 0
     t.integer  "order_count",         default: 0
+    t.bigint   "cc"
+  end
+
+  create_table "wallets", force: :cascade do |t|
+    t.date     "date"
+    t.float    "total"
+    t.integer  "mov_type"
+    t.integer  "souce_type"
+    t.integer  "third_type"
+    t.integer  "third_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

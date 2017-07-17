@@ -18,7 +18,7 @@ class V1::Userapp::RegisterController < ApplicationController
 	private
 
 	def user_params
-		params.permit(:email, :address_description, :address_latitude, :address_longitude, :name, :lastname, :phone)
+		params.permit(:email, :address_description, :address_latitude, :address_longitude, :name, :lastname, :phone, :cc)
 	end
 
 end

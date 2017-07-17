@@ -74,11 +74,11 @@ class V1::Businessplace::BusinessplaceController < ApplicationController
 	private
 
 	def place_params
-		params.permit(:name)
+		params.permit(:name, :nit)
 	end
 
 	def kangu_admin_place_params
-		params.permit(:name, :credit_term, :credit_fit, :current_deb, :credit_active)
+		params.permit(:name, :credit_term, :credit_fit, :current_deb, :credit_active, :nit)
 	end
 
 end
