@@ -70,11 +70,8 @@ class V1::Orders::OrdersController < ApplicationController
 
 	def advance
 		order = Order.find(params[:id])
-		if order.status < 1 
-			if order.update(status: order.status+1)
-				render :json => order, status: :ok
-			end
-		elsif order.status == 1
+		case order.status
+		when 1
 			total = 0
 			products = OrderProduct.where(order_id: order.id)
 			products.each do |p|
@@ -85,7 +82,7 @@ class V1::Orders::OrdersController < ApplicationController
 			end
 			sucursal = BusinessSucursal.find(order.target_id)
 			sucursal.update(order_count: sucursal.order_count + 1)
-			consecutive = Order.where(status: 3).count + Order.where(status: 2).count + 1
+			consecutive = Order.where(status: 3).count + Order.where(status: 4).count + 1
 			if order.order_type == 0 and order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS
 				place = BusinessPlace.find(sucursal.business_id)
 				deb = place.current_deb + total - order.total
@@ -96,6 +93,10 @@ class V1::Orders::OrdersController < ApplicationController
 				render :json => order, status: :ok
 			else
 				order.update(consecutive: consecutive, total: total, status: order.status+1)
+				render :json => order, status: :ok
+			end
+		else
+			if order.update(status: order.status+1)
 				render :json => order, status: :ok
 			end
 		end
@@ -168,7 +169,11 @@ class V1::Orders::OrdersController < ApplicationController
 
 	def change_status(status, id)
 		order = Order.find(id)
-		if order.update(status: status)
+		consecutive = nil
+		if status == 4
+			consecutive = Order.where(status: 3).count + Order.where(status: 4).count + 1
+		end
+		if order.update(status: status, consecutive: consecutive)
 			render :json => order, status: :ok
 		end
 	end
