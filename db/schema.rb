@@ -90,10 +90,10 @@ ActiveRecord::Schema.define(version: 20170715193725) do
     t.integer  "variant_id"
     t.float    "quantity"
     t.float    "unit_value"
-    t.boolean  "is_payed"
+    t.boolean  "is_payed",    default: false
     t.date     "pay_day"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
 
   create_table "order_lists", force: :cascade do |t|

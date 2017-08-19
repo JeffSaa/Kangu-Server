@@ -7,6 +7,7 @@ class User < ApplicationRecord
 	validates :lastname, presence: true
 	validates :address_description, presence: true
 	validates :phone, presence: true
+	validates :cc, presence: true
 
 	def downcase_fields
 		self.name = self.name.downcase

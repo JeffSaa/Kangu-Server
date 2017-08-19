@@ -25,4 +25,15 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def inventory_entry
+		response = InventoryEntry.new(entry_params)
+		render :json => response, status: :ok
+	end
+
+	private
+
+	def entry_params
+		params.permit(:date, :bill_number, :provider_id, :variant_id, :quantity, :unit_value, :is_payed, :pay_day)
+	end
+
 end

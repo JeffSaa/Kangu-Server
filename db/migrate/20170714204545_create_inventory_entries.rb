@@ -7,7 +7,7 @@ class CreateInventoryEntries < ActiveRecord::Migration[5.0]
 			t.integer :variant_id
 			t.float :quantity
 			t.float :unit_value
-			t.boolean :is_payed
+			t.boolean :is_payed, :default => false
 			t.date :pay_day
 
 			t.timestamps
