@@ -1,5 +1,5 @@
 class V1::Variants::VariantsController < ApplicationController
-	before_action :validate_authentification_token, :except => [:search_product, :index, :excel_updater]
+	before_action :validate_authentification_token, :except => [:search_product, :index, :excel_updater, :search]
 
 	def index
 		password = SymmetricEncryption.encrypt params[:password]
@@ -35,7 +35,7 @@ class V1::Variants::VariantsController < ApplicationController
 			ProductVariant.where('name LIKE ?', "%#{params[:search]}%").each{|p| response <<
 				{variant: p, product: Product.find(p.product_id)}}
 		end
-		render :json => {model: response}, status: :ok
+		render :json => response, status: :ok
 	end
 
 	def excel_updater

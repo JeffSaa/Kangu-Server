@@ -26,14 +26,26 @@ class V1::Administration::AccountingController < ApplicationController
 	end
 
 	def inventory_entry
-		response = InventoryEntry.new(entry_params)
+		response = []
+		entries = params[:entries]
+		entries.each do |e|
+			entry = InventoryEntry.new(entry_params(e))
+			entry.date = params[:date]
+			entry.bill_number = params[:bill_number]
+			entry.provider_id = params[:provider_id]
+			entry.is_payed = params[:is_payed]
+			entry.pay_day = params[:pay_day]
+			if entry.save
+				response << entry				
+			end
+		end 
 		render :json => response, status: :ok
 	end
 
 	private
 
-	def entry_params
-		params.permit(:date, :bill_number, :provider_id, :variant_id, :quantity, :unit_value, :is_payed, :pay_day)
+	def entry_params(e)
+		e.permit(:date, :bill_number, :provider_id, :variant_id, :quantity, :unit_value, :is_payed, :pay_day)
 	end
 
 end

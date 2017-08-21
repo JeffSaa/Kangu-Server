@@ -22,7 +22,7 @@ class V1::Providers::ProvidersController < ApplicationController
 			Provider.where('name LIKE ?', "%#{params[:search]}%").each{|p| response << {provider: p, user: User.find(p.user_id)}}
 
 		end
-		render :json => {model: response}, status: :ok
+		render :json => response, status: :ok
 	end
 
 	private
