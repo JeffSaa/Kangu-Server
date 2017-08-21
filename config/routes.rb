@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	root 'welcome#index'
 
-	namespace :v1 do
+	namespace :v1, :defaults => { :format => 'json' } do
 		
 		namespace :products do
 			resources :products, format: :json
@@ -49,7 +49,7 @@ Rails.application.routes.draw do
 
 		namespace :users do
 			resources :users, format: :json
-			post :search, to: :search, controller: :users
+			get :search, to: :search, controller: :users
 			resources :login, format: :json
 			resources :logout, format: :json
 			post :register, to: :register, controller: :register

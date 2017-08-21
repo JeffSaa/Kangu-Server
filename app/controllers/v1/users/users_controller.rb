@@ -15,7 +15,7 @@ class V1::Users::UsersController < ApplicationController
 			q = params[:search].downcase
 			users = User.where('email LIKE ?', "%#{params[:search]}%")
 		end
-		render :json => {model: users}, status: :ok
+		render :json => users, status: :ok
 	end
 
 end
