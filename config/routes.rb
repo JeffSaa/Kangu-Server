@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
 		namespace :categories do
 			resources :categories, format: :json
-			post :search_subcategorie, to: :search_subcategorie, controller: :categories
+			get :search, to: :search, controller: :categories
 		end
 
 		namespace :charge do

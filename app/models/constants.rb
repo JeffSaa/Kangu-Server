@@ -21,4 +21,8 @@ class Constants
 	BUSINESS_CHEF = 303
 	BUSINESS_OPERATOR = 304
 
+	# Measurement type
+	MEASUREMENT_LT = 0
+	MEASUREMENT_KG = 1
+
 end

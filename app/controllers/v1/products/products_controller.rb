@@ -4,7 +4,9 @@ class V1::Products::ProductsController < ApplicationController
 	def index
 		#response = Product.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
 		#set_paginate_header(Constants::ITEMS_PER_PAGE, response, params[:page])
-		render :json => {model: Product.all}, status: :ok
+		response = []
+		Product.all.each{|p| response << {product: p, subcategorie: Categorie.find(p.subcategorie_id)}}
+		render :json => response, status: :ok
 	end
 
 	def show

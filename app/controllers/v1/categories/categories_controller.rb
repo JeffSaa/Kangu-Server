@@ -23,7 +23,7 @@ class V1::Categories::CategoriesController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def search_subcategorie
+	def search
 		q = params[:search].downcase
 		response = Categorie.where('name LIKE ?', "%#{q}%").where(categorie_type: params[:type])
 		render :json => response, status: :ok
