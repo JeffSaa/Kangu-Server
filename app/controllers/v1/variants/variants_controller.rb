@@ -15,15 +15,11 @@ class V1::Variants::VariantsController < ApplicationController
 		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			variant = ProductVariant.new(variant_params)
 			variant.downcase_fields
-			if variant.save
-				params[:type_id] = Constants::KANGU_PROVIDER
-				params[:user_id] = params[:provider_id]
-				params[:target_id] = variant.id
-				charge = create_charge()
-				if charge.save
-					upload_blob("variant", params[:photo], variant.id)
-					render :json => {variant: variant, charge: charge}, status: :ok
-				end
+			if params[:photo] and variant.save
+				image_name = variant.name.gsub(' ','_')+'_k'+variant.id.to_s
+				variant.update(original_image: image_name)
+				upload_blob("variant", params[:photo], image_name)
+				render :json => variant, status: :ok
 			end
 		end
 	end
