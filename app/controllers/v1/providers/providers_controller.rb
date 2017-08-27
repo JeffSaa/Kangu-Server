@@ -25,6 +25,14 @@ class V1::Providers::ProvidersController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def assign
+		response = create_charge()
+		response.type_id = Constants::KANGU_PROVIDER
+		if response.save		
+			render :json => response, status: :ok
+		end
+	end
+
 	private
 
 	def provider_params

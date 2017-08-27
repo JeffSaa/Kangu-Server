@@ -24,6 +24,18 @@ class V1::Variants::VariantsController < ApplicationController
 		end
 	end
 
+	def show
+		variant = ProductVariant.find(params[:id])
+		providers = []
+		::Charge::where(type_id: Constants::KANGU_PROVIDER, target_id: variant.id).each do |p|
+			pro = Provider.find(p.user_id)
+			user = User.find(pro.user_id)
+			providers << {info: pro, user: user}
+		end 
+		response = {variant: variant, product: Product.find(variant.product_id), providers: providers}
+		render :json => response, status: :ok
+	end
+
 	def search
 		response = []
 		if params[:search].length > 0
