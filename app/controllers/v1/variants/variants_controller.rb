@@ -36,6 +36,18 @@ class V1::Variants::VariantsController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def update
+		variant = ProductVariant.find(params[:id])
+		if variant.update(variant_params)
+			if params[:photo]
+				image_name = variant.name.gsub(' ','_')+'_k'+variant.id.to_s
+				variant.update(original_image: image_name)
+				upload_blob("variant", params[:photo], variant.original_image)
+			end
+			render :json => variant, status: :ok
+		end
+	end
+
 	def search
 		response = []
 		if params[:search].length > 0
