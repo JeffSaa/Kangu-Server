@@ -2,10 +2,10 @@ class V1::Products::ProductsController < ApplicationController
 	before_action :validate_authentification_token, :except => [:search_product, :index]
 
 	def index
-		#response = Product.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
-		#set_paginate_header(Constants::ITEMS_PER_PAGE, response, params[:page])
 		response = []
-		Product.all.each{|p| response << {product: p, subcategorie: Categorie.find(p.subcategorie_id)}}
+		model = Product.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
+		model.each{|p| response << {product: p, subcategorie: Categorie.find(p.subcategorie_id)}}
+		set_paginate_header(Constants::ITEMS_PER_PAGE, model, params[:page])
 		render :json => response, status: :ok
 	end
 
