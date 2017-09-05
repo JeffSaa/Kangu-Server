@@ -2,12 +2,9 @@ class V1::Businessplace::BusinessplaceController < ApplicationController
 	before_action :validate_authentification_token, :except => [:credit_status]
 
 	def index
-		response = []
-		places = BusinessPlace.all
-		places.each do |p|
-			response << {place: p, sucursals: BusinessSucursal.where(business_id: p.id)}
-		end
-		render :json => {model: response}, status: :ok
+		response = BusinessPlace.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
+		set_paginate_header(Constants::ITEMS_PER_PAGE, response, params[:page])
+		render :json => response, status: :ok
 	end
 
 	def create
