@@ -220,11 +220,12 @@ ActiveRecord::Schema.define(version: 20170827164758) do
     t.date     "date"
     t.float    "total"
     t.integer  "mov_type"
-    t.integer  "souce_type"
+    t.integer  "source_type"
     t.integer  "third_type"
     t.integer  "third_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.float    "balance"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
 end

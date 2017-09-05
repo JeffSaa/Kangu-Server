@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
 		namespace :businessplace do
 			resources :businessplace, format: :json
-			post :search, to: :search, controller: :businessplace
+			get :search, to: :search, controller: :businessplace
 			post :credit_status, to: :credit_status, controller: :businessplace
 		end
 
@@ -57,6 +57,7 @@ Rails.application.routes.draw do
 		namespace :administration do
 			post :close_day, to: :close_day, controller: :accounting
 			post :inventory_entry, to: :inventory_entry, controller: :accounting
+			post :income_expenses, to: :income_expenses, controller: :accounting
 		end
 
 		namespace :creditnote do

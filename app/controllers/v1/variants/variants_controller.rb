@@ -16,7 +16,7 @@ class V1::Variants::VariantsController < ApplicationController
 			variant = ProductVariant.new(variant_params)
 			variant.downcase_fields
 			if params[:photo] and variant.save
-				image_name = variant.name.gsub(' ','_')+'_k'+variant.id.to_s
+				image_name = variant.name.gsub(' ','_')+'_original_k'+variant.id.to_s
 				variant.update(original_image: image_name)
 				upload_blob("variant", params[:photo], image_name)
 				render :json => variant, status: :ok
@@ -40,7 +40,7 @@ class V1::Variants::VariantsController < ApplicationController
 		variant = ProductVariant.find(params[:id])
 		if variant.update(variant_params)
 			if params[:photo]
-				image_name = variant.name.gsub(' ','_')+'_k'+variant.id.to_s
+				image_name = variant.name.gsub(' ','_')+'_original_k'+variant.id.to_s
 				variant.update(original_image: image_name)
 				upload_blob("variant", params[:photo], variant.original_image)
 			end

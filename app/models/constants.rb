@@ -6,8 +6,6 @@ class Constants
 	# Paymodes
 	PAY_MODE_CASH = 0
 	PAY_MODE_CREDIT_BUSINESS = 1
-
-	# Credit pay_mode
 	CREDIT_EXTRA_DAY = 20
 	CREDIT_INTEREST_PERCENT = 3
 
@@ -24,5 +22,12 @@ class Constants
 	# Measurement type
 	MEASUREMENT_LT = 0
 	MEASUREMENT_KG = 1
+
+	#Income-Expenses
+	MOV_TYPE_INCOME = 0
+	MOV_TYPE_EXPENSES = 1
+	SOURCE_TYPE_OTHER = 0
+	THIRD_TYPE_BUSINESS = 0
+	THIRD_TYPE_PERSON = 1
 
 end

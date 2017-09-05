@@ -42,7 +42,23 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def income_expenses
+		response = Wallet.new(income_expenses_params)
+		if response.mov_type == Constants::MOV_TYPE_INCOME
+			response.balance = Wallet.last.balance + response.total
+		else
+			response.balance = Wallet.last.balance - response.total
+		end
+		if response.save
+			render :json => response, status: :ok
+		end
+	end
+
 	private
+
+	def income_expenses_params
+		params.permit(:date, :total, :mov_type, :source_type, :third_type, :third_id)
+	end
 
 	def entry_params(e)
 		e.permit(:date, :bill_number, :provider_id, :variant_id, :quantity, :unit_value, :is_payed, :pay_day)
