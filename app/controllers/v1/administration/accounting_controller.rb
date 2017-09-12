@@ -26,19 +26,17 @@ class V1::Administration::AccountingController < ApplicationController
 	end
 
 	def inventory_entry
-		response = []
-		entries = params[:entries]
-		entries.each do |e|
-			entry = InventoryEntry.new(entry_params(e))
-			entry.date = params[:date]
-			entry.bill_number = params[:bill_number]
-			entry.provider_id = params[:provider_id]
-			entry.is_payed = params[:is_payed]
-			entry.pay_day = params[:pay_day]
-			if entry.save
-				response << entry				
+		response = {group: nil, entries: []}
+		response[:group] = InventoryEntryGroup.new(group_params)
+		if response[:group]
+			params[:entries].each do |e|
+				e = InventoryEntry.new(entry_params(e))
+				e.group_id = response[:group].id
+				if e
+					response[:entries] << e
+				end
 			end
-		end 
+		end
 		render :json => response, status: :ok
 	end
 
@@ -60,8 +58,12 @@ class V1::Administration::AccountingController < ApplicationController
 		params.permit(:date, :total, :mov_type, :source_type, :third_type, :third_id)
 	end
 
+	def group_params
+		params.permit(:date, :bill_number, :provider_id, :is_payed, :pay_day)
+	end
+
 	def entry_params(e)
-		e.permit(:date, :bill_number, :provider_id, :variant_id, :quantity, :unit_value, :is_payed, :pay_day)
+		e.permit(:variant_id, :quantity, :unit_value)
 	end
 
 end

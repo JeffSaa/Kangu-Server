@@ -3,7 +3,6 @@ class V1::Orders::OrdersController < ApplicationController
 
 	def create
 		order = Order.new(order_params)
-		can_save = false
 		if charge_exist(@current_user, Constants::KANGU_ADMIN)
 			order.status = params[:status]
 			order.target_id = params[:target_id]
@@ -11,36 +10,19 @@ class V1::Orders::OrdersController < ApplicationController
 			order.target_id = @current_user.id
 		end
 		response = {order_info: order, products: []}
-		params[:products].each do |p|
-			op = OrderProduct.new(orderproduct_params(p))
-			op.price = get_product_price(ProductVariant.find(op.variant_id))
-			order.total += op.price * op.quantity
-			op.last_quantity = op.quantity
-			op.order_id = order.id
-			op.iva = ProductVariant.find(p[:variant_id]).iva
-			op.provider_id = getProvider(p[:variant_id], order.target_id, order.order_type).last[:provider].id
-			response[:products] << op
-		end
-		case order.order_type
-		when 0
-			if order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS
-				place = getSucursalPlace(order.target_id)
-				if place.current_deb + order.total <= place.credit_fit and place.credit_active
-					place.update(current_deb: place.current_deb + order.total)
-					can_save = true
+		if order.save
+			params[:products].each do |p|
+				op = OrderProduct.new(orderproduct_params(p))
+				op.price = get_product_price(ProductVariant.find(op.variant_id))
+				order.total += op.price * op.quantity
+				op.last_quantity = op.quantity
+				op.order_id = order.id
+				op.iva = ProductVariant.find(p[:variant_id]).iva
+				if op.save
+					response[:products] << op
 				end
-			else
-				can_save = true
-			end
-		end
-		if can_save and order.save
-			response[:products].each do |p|
-				p.order_id = order.id
-				p.save
 			end
 			render :json => response, status: :ok
-		else
-			render :json => response, status: :bad_request
 		end
 	end
 

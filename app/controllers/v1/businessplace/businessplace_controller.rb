@@ -42,7 +42,7 @@ class V1::Businessplace::BusinessplaceController < ApplicationController
 	end
 
 	def show
-		response = {place: BusinessPlace.find(params[:id]), owner: getPlaceOwner(params[:id]), sucursal: BusinessSucursal.where(business_id:params[:id])}
+		response = {place: BusinessPlace.find(params[:id]), owner: getPlaceOwner(params[:id]), sucursals: BusinessSucursal.where(business_id:params[:id])}
 		render :json => response, status: :ok
 	end
 
