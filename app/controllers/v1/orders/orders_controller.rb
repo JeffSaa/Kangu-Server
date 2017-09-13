@@ -11,10 +11,11 @@ class V1::Orders::OrdersController < ApplicationController
 		end
 		response = {order_info: order, products: []}
 		if order.save
+			total = 0
 			params[:products].each do |p|
 				op = OrderProduct.new(orderproduct_params(p))
 				op.price = get_product_price(ProductVariant.find(op.variant_id))
-				order.total += op.price * op.quantity
+				total += op.price * op.quantity
 				op.last_quantity = op.quantity
 				op.order_id = order.id
 				op.iva = ProductVariant.find(p[:variant_id]).iva
@@ -22,23 +23,15 @@ class V1::Orders::OrdersController < ApplicationController
 					response[:products] << op
 				end
 			end
-			render :json => response, status: :ok
+			if order.update(total: total)
+				render :json => response, status: :ok
+			end
 		end
 	end
 
 	def index
 		response = []
-		orders = Order.where(status: params[:status])
-		orders.each do |o|
-			sucursal = BusinessSucursal.find(o.target_id)
-			item =  {info: {order: o, sucursal: sucursal, business: BusinessPlace.find(sucursal.business_id)},
-			products: []}
-			OrderProduct.where(order_id: o.id).each do |op|
-				variant = ProductVariant.find(op.variant_id)
-				item[:products] << {order_product: op, variant: variant, product: Product.find(variant.product_id)}
-			end
-			response << item
-		end
+		Order.where(status: params[:status]).each{|o| response << render_order(o)}
 		render :json => response, status: :ok
 	end
 
@@ -65,18 +58,8 @@ class V1::Orders::OrdersController < ApplicationController
 			sucursal = BusinessSucursal.find(order.target_id)
 			sucursal.update(order_count: sucursal.order_count + 1)
 			consecutive = Order.where(status: 3).count + Order.where(status: 4).count + 1
-			if order.order_type == 0 and order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS
-				place = BusinessPlace.find(sucursal.business_id)
-				deb = place.current_deb + total - order.total
-				place.update(current_deb: deb)
-				pay_day = order.datehour.to_date + place.credit_term
-				order.update(consecutive: consecutive, total: total, credit_interest: Constants::CREDIT_INTEREST_PERCENT,
-					pay_day: pay_day, next_interest_day: pay_day + Constants::CREDIT_EXTRA_DAY, status: order.status+1)
-				render :json => order, status: :ok
-			else
-				order.update(consecutive: consecutive, total: total, status: order.status+1)
-				render :json => order, status: :ok
-			end
+			order.update(consecutive: consecutive, total: total, status: order.status+1)
+			render :json => order, status: :ok
 		else
 			if order.update(status: order.status+1)
 				render :json => order, status: :ok
@@ -125,6 +108,12 @@ class V1::Orders::OrdersController < ApplicationController
 
 	def show_by_uid
 		order = Order.find_by(uid: params[:uid])
+		render :json => render_order(order), status: :ok
+	end
+
+	private
+
+	def render_order(order)
 		products = []
 		order_products = OrderProduct.where(order_id: order.id)
 		order_products.each do |op|
@@ -139,11 +128,8 @@ class V1::Orders::OrdersController < ApplicationController
 		end
 		sucursal = BusinessSucursal.find(order.target_id)
 		place = BusinessPlace.find(sucursal.business_id)
-		response = {order: order, products: products, sucursal: sucursal, place: place, iva: iva}
-		render :json => response, status: :ok
+		return {order: order, products: products, sucursal: sucursal, place: place, iva: iva}
 	end
-
-	private
 
 	def update_orderproduct_params(p)
 		p.permit(:quantity, :comment, :status)
