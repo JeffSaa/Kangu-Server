@@ -43,6 +43,34 @@ class V1::Orders::OrdersController < ApplicationController
 		render :json => get_order_details(Order.find_by(consecutive: params[:consecutive])), status: :ok
 	end
 
+	def remove_product
+		order_product = OrderProduct.find(params[:id])
+		order = Order.find(order_product.order_id)
+		if order.status < 2 and order_product.destroy and order.update(total: order.total - order_product.price * order_product.quantity)
+			render :json => order, status: :ok
+		end
+	end
+
+	def add_product
+		op = OrderProduct.new(orderproduct_params(params[:model]))
+		response = Order.find(params[:model][:order_id])
+		op.order_id = response.id
+		op.price = get_product_price(ProductVariant.find(op.variant_id))
+		if op.save and response.update(total: response.total + op.price * op.quantity)
+			render :json => render_order(response), status: :ok
+		end
+	end
+
+	def update_product
+		op = OrderProduct.find(params[:id])
+		order = Order.find(op.order_id)
+		temp_total = op.price * op.quantity
+		temp_q = op.quantity
+		if op.update(comment: params[:comment], quantity: params[:quantity], last_quantity: temp_q) and order.update(total: op.price * params[:quantity].to_i + order.total - temp_total)
+			render :json => render_order(order), status: :ok
+		end
+	end
+
 	def advance
 		order = Order.find(params[:id])
 		case order.status
@@ -51,13 +79,13 @@ class V1::Orders::OrdersController < ApplicationController
 			products = OrderProduct.where(order_id: order.id)
 			products.each do |p|
 				variant = ProductVariant.find(p.variant_id)
-				if p.update(price: get_product_price(variant), iva: variant.iva)
+				if p.update(price: get_product_price(variant), iva: variant.iva) and variant.update(variant_stock: variant.variant_stock -= p.quantity)
 					total += p.price * p.quantity
 				end
 			end
 			sucursal = BusinessSucursal.find(order.target_id)
 			sucursal.update(order_count: sucursal.order_count + 1)
-			consecutive = Order.where(status: 3).count + Order.where(status: 4).count + 1
+			consecutive = Order.where(status: 3).count + Order.where(status: 4).count + Order.where(status: 2).count + 1
 			order.update(consecutive: consecutive, total: total, status: order.status+1)
 			render :json => order, status: :ok
 		else
@@ -121,10 +149,10 @@ class V1::Orders::OrdersController < ApplicationController
 			products << {order_product: op, variant: variant, product: Product.find(variant.product_id)}
 		end
 		iva = []
-		[0, 0.05, 0.16].each do |i|
+		[0, 5, 16].each do |i|
 			total = 0
 			order_products.where(iva: i).each{|op| total += op.price * op.quantity}
-			iva << [total , total * i]
+			iva << [total ,i * total / 100]
 		end
 		sucursal = BusinessSucursal.find(order.target_id)
 		place = BusinessPlace.find(sucursal.business_id)
@@ -152,6 +180,10 @@ class V1::Orders::OrdersController < ApplicationController
 
 	def orderproduct_params(p)
 		p.permit(:comment, :quantity, :variant_id)
+	end
+
+	def update_orderproduct_param
+		params.permit(:comment, :quantity)
 	end
 
 	def get_order_details(order)

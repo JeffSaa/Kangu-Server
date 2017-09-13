@@ -44,6 +44,9 @@ Rails.application.routes.draw do
 			get :day_shop, to: :day_shop, controller: :orders
 			get :find_by_consecutive, to: :find_by_consecutive, controller: :orders
 			post :show_by_uid, to: :show_by_uid, controller: :orders
+			post :remove_product, to: :remove_product, controller: :orders
+			post :add_product, to: :add_product, controller: :orders
+			put :update_product, to: :update_product, controller: :orders
 		end
 
 		namespace :users do

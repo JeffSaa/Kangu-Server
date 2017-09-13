@@ -28,12 +28,15 @@ class V1::Administration::AccountingController < ApplicationController
 	def inventory_entry
 		response = {group: nil, entries: []}
 		response[:group] = InventoryEntryGroup.new(group_params)
-		if response[:group]
+		if response[:group].save
 			params[:entries].each do |e|
 				e = InventoryEntry.new(entry_params(e))
 				e.group_id = response[:group].id
-				if e
-					response[:entries] << e
+				if e.save
+					variant = ProductVariant.find(e.variant_id)
+					variant.update(variant_stock: variant.variant_stock += e.quantity)
+					e.update(variant_stock: variant.variant_stock)
+					response[:entries] << {entry: e, variant: variant}
 				end
 			end
 		end
