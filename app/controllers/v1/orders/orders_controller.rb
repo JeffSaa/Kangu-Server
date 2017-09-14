@@ -36,11 +36,11 @@ class V1::Orders::OrdersController < ApplicationController
 	end
 
 	def show
-		render :json => get_order_details(Order.find(params[:id])), status: :ok
+		render :json => render_order(Order.find(params[:id])), status: :ok
 	end
 
 	def find_by_consecutive
-		render :json => get_order_details(Order.find_by(consecutive: params[:consecutive])), status: :ok
+		render :json => render_order(Order.find_by(consecutive: params[:consecutive])), status: :ok
 	end
 
 	def remove_product
@@ -66,7 +66,7 @@ class V1::Orders::OrdersController < ApplicationController
 		order = Order.find(op.order_id)
 		temp_total = op.price * op.quantity
 		temp_q = op.quantity
-		if op.update(comment: params[:comment], quantity: params[:quantity], last_quantity: temp_q) and order.update(total: op.price * params[:quantity].to_i + order.total - temp_total)
+		if op.update(comment: params[:comment], quantity: params[:quantity], last_quantity: temp_q, price: params[:price]) and order.update(total: op.price * params[:quantity].to_i + order.total - temp_total)
 			render :json => render_order(order), status: :ok
 		end
 	end
@@ -128,7 +128,7 @@ class V1::Orders::OrdersController < ApplicationController
 		end
 		duplicates.each do |d|
 			variant = ProductVariant.find(d.first.variant_id)
-			response << {variant: variant, product: Product.find(variant.product_id), provider: getProvider(variant.id, nil, nil).last, duplicates: d,
+			response << {variant: variant, product: Product.find(variant.product_id), duplicates: d,
 				quantity: d.inject(0){|sum,e| sum + e.quantity}}
 		end
 		render :json => response, status: :ok
@@ -137,6 +137,19 @@ class V1::Orders::OrdersController < ApplicationController
 	def show_by_uid
 		order = Order.find_by(uid: params[:uid])
 		render :json => render_order(order), status: :ok
+	end
+
+	def search_orderproduct
+		response = []
+		order = Order.find(params[:order_id])
+		products = []
+		OrderProduct.where(order_id: order.id).each{|op| products << {order_product: op, variant: ProductVariant.find(op.variant_id)}}
+		products.each do |p|
+			if p[:variant].name.include?(params[:search])
+				response << p
+			end
+		end
+		render :json => response, status: :ok
 	end
 
 	private
@@ -183,7 +196,7 @@ class V1::Orders::OrdersController < ApplicationController
 	end
 
 	def update_orderproduct_param
-		params.permit(:comment, :quantity)
+		params.permit(:comment, :quantity, :price)
 	end
 
 	def get_order_details(order)

@@ -47,6 +47,7 @@ Rails.application.routes.draw do
 			post :remove_product, to: :remove_product, controller: :orders
 			post :add_product, to: :add_product, controller: :orders
 			put :update_product, to: :update_product, controller: :orders
+			get :search_orderproduct, to: :search_orderproduct, controller: :orders
 		end
 
 		namespace :users do

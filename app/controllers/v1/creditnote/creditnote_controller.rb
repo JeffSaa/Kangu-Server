@@ -14,7 +14,7 @@ class V1::Creditnote::CreditnoteController < ApplicationController
 					if item.save
 						response[:items] << item
 						op = OrderProduct.find(item.product_id)
-						total += get_product_price(ProductVariant.find(op.variant_id)) * item.quantity
+						total += op.price * item.quantity
 					end
 				end
 				if note.update(total: total)
