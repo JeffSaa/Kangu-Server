@@ -62,6 +62,7 @@ Rails.application.routes.draw do
 			post :close_day, to: :close_day, controller: :accounting
 			post :inventory_entry, to: :inventory_entry, controller: :accounting
 			post :income_expenses, to: :income_expenses, controller: :accounting
+			get :inventory_movements, to: :inventory_movements, controller: :accounting
 		end
 
 		namespace :creditnote do

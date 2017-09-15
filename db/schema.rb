@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(version: 20170913192304) do
     t.boolean  "is_payed",    default: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
+    t.boolean  "is_entry",    default: true
   end
 
   create_table "order_lists", force: :cascade do |t|

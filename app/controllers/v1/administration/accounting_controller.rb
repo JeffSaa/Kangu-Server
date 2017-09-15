@@ -43,6 +43,19 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
+	def inventory_movements
+		response = []
+		InventoryEntryGroup.where(date: params[:date]).sort_by{|a| a.is_entry ? 0 : 1}.each do |g|
+			entries = []
+			InventoryEntry.where(group_id: g.id).each do |ie|
+				variant = ProductVariant.find(ie.variant_id)
+				entries << {entry: ie, variant: variant, product: Product.find(variant.product_id)}
+			end
+			response << {group: g, entries: entries}
+		end
+		render :json => response, status: :ok
+	end
+
 	def income_expenses
 		response = Wallet.new(income_expenses_params)
 		if response.mov_type == Constants::MOV_TYPE_INCOME

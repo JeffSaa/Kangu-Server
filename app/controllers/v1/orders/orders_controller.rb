@@ -77,10 +77,15 @@ class V1::Orders::OrdersController < ApplicationController
 		when 1
 			total = 0
 			products = OrderProduct.where(order_id: order.id)
-			products.each do |p|
-				variant = ProductVariant.find(p.variant_id)
-				if p.update(price: get_product_price(variant), iva: variant.iva) and variant.update(variant_stock: variant.variant_stock -= p.quantity)
-					total += p.price * p.quantity
+			group = InventoryEntryGroup.new(date: order.datehour.to_date, is_entry: false)
+			if group.save
+				products.each do |p|
+					variant = ProductVariant.find(p.variant_id)
+					q_temp = variant.variant_stock -= p.quantity
+					ie = InventoryEntry.new(variant_id: variant.id, quantity: p.quantity, group_id: group.id, variant_stock: q_temp)
+					if p.update(price: get_product_price(variant), iva: variant.iva) and variant.update(variant_stock: q_temp) and ie.save
+						total += p.price * p.quantity
+					end
 				end
 			end
 			sucursal = BusinessSucursal.find(order.target_id)
