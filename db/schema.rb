@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170913192304) do
+ActiveRecord::Schema.define(version: 20170918143527) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -233,8 +233,10 @@ ActiveRecord::Schema.define(version: 20170913192304) do
     t.integer  "third_type"
     t.integer  "third_id"
     t.float    "balance"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "cash_id"
+    t.float    "cash_balance", default: 0.0
   end
 
 end

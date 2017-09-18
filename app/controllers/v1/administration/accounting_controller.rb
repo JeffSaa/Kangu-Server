@@ -45,7 +45,7 @@ class V1::Administration::AccountingController < ApplicationController
 
 	def inventory_movements
 		response = []
-		InventoryEntryGroup.where(date: params[:date]).sort_by{|a| a.is_entry ? 0 : 1}.each do |g|
+		InventoryEntryGroup.where(date: params[:date]).each do |g|
 			entries = []
 			InventoryEntry.where(group_id: g.id).each do |ie|
 				variant = ProductVariant.find(ie.variant_id)
@@ -58,20 +58,29 @@ class V1::Administration::AccountingController < ApplicationController
 
 	def income_expenses
 		response = Wallet.new(income_expenses_params)
+		cash_balance = Wallet.where(cash_id: params[:cash_id]).last
+		last_wallet = Wallet.last
 		if response.mov_type == Constants::MOV_TYPE_INCOME
-			response.balance = Wallet.last.balance + response.total
+			response.balance = last_wallet.balance + response.total
+			response.cash_balance = cash_balance.present? ? cash_balance.cash_balance + response.total : (response.total)
 		else
-			response.balance = Wallet.last.balance - response.total
+			response.balance = last_wallet.balance - response.total
+			response.cash_balance = cash_balance.present? ? cash_balance.cash_balance - response.total : (response.total * -1)
 		end
 		if response.save
 			render :json => response, status: :ok
 		end
 	end
 
+	def income_expenses_movements
+		response = Wallet.where(date: params[:date])
+		render :json => response, status: :ok
+	end
+
 	private
 
 	def income_expenses_params
-		params.permit(:date, :total, :mov_type, :source_type, :third_type, :third_id)
+		params.permit(:date, :total, :mov_type, :source_type, :third_type, :third_id, :cash_id)
 	end
 
 	def group_params

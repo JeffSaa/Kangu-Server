@@ -83,7 +83,13 @@ class V1::Orders::OrdersController < ApplicationController
 					variant = ProductVariant.find(p.variant_id)
 					q_temp = variant.variant_stock -= p.quantity
 					ie = InventoryEntry.new(variant_id: variant.id, quantity: p.quantity, group_id: group.id, variant_stock: q_temp)
-					if p.update(price: get_product_price(variant), iva: variant.iva) and variant.update(variant_stock: q_temp) and ie.save
+					cash_balance = Wallet.where(cash_id: Constants::CASH_MINOR).last
+					last_wallet = Wallet.last
+					w = Wallet.new(date: order.datehour.to_date, total: order.total, mov_type: Constants::MOV_TYPE_INCOME, source_type: Constants::RECAUDO_VENTAS,
+						cash_id: Constants::CASH_MINOR)
+					w.balance = last_wallet.balance + order.total
+					w.cash_balance = cash_balance.present? ? cash_balance.cash_balance + order.total : (order.total)
+					if p.update(price: get_product_price(variant), iva: variant.iva) and variant.update(variant_stock: q_temp) and ie.save and w.save
 						total += p.price * p.quantity
 					end
 				end
@@ -154,6 +160,46 @@ class V1::Orders::OrdersController < ApplicationController
 				response << p
 			end
 		end
+		render :json => response, status: :ok
+	end
+
+	def payu_method
+		order = {
+			merchant_pos_id: "145227",
+			customer_ip: "127.0.0.1", # You can user request.remote_ip in your controller
+			ext_order_id: 1342, #Order id in your system
+			order_url: "http://localhost/",
+			description: "New order",
+			currency_code: "PLN",
+			total_amount: 10000,
+			notify_url: "http://localhost/",
+			buyer: {
+				email: 'dd@ddd.pl',
+				phone: '123123123',
+				first_name: 'Jan',
+				last_name: 'Kowalski',
+				language: 'PL',
+				delivery: {
+				street: 'street',
+				postal_code: 'postal_code',
+				city: 'city',
+				country_code: 'PL'
+				}
+			},
+			products: [
+				{
+					name: 'Mouse',
+					unit_price: 10000,
+					quantity: 1
+				}
+			],
+				shipping_methods: {
+				country: 'PL',
+				price: 'price',
+				name: 'shipping name'
+			}
+		}
+		response = OpenPayU::Order.create(order)
 		render :json => response, status: :ok
 	end
 

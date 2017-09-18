@@ -1,0 +1,20 @@
+development:
+  merchant_pos_id: '302435'
+  signature_key: ea8c6463cbc62c45299820b20daf4c13
+  algorithm: MD5 # MD5, SHA-1, SHA-256
+  service_domain: payu.com
+  protocol: https
+  env: secure
+  order_url: http://localhost/order
+  notify_url: http://localhost/notify
+  continue_url: http://localhost/success
+production:
+  merchant_pos_id: '145227'
+  signature_key: 13a980d4f851f3d9a1cfc792fb1f5e50
+  algorithm: MD5 # MD5, SHA-1, SHA-256
+  service_domain: payu.com
+  protocol: https
+  env: secure
+  order_url: http://localhost/order
+  notify_url: http://localhost/notify
+  continue_url: http://localhost/success

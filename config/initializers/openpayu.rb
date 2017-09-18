@@ -1,0 +1,1 @@
+OpenPayU::Configuration.configure File.join(Rails.root, 'config/openpayu.yml')
