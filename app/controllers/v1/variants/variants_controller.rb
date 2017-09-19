@@ -1,14 +1,10 @@
 class V1::Variants::VariantsController < ApplicationController
-	before_action :validate_authentification_token, :except => [:search_product, :index, :excel_updater, :search]
+	before_action :validate_authentification_token, :except => [:search_product, :excel_updater, :search]
 
 	def index
-		password = SymmetricEncryption.encrypt params[:password]
-		user = User.find_by(email: params[:email], password: password)
-		if user and user.active and charge_exist(user, Constants::KANGU_ADMIN)
-			render :json => ProductVariant.all, status: :ok
-		else
-			render :json => {}, status: :not_found
-		end
+		response = ProductVariant.all.paginate(:per_page => Constants::ITEMS_PER_PAGE, :page => params[:page])
+		set_paginate_header(Constants::ITEMS_PER_PAGE, response, params[:page])
+		render :json => response, status: :ok
 	end
 
 	def create
@@ -85,7 +81,7 @@ class V1::Variants::VariantsController < ApplicationController
 
 	def variant_params
 		params.permit(:name, :entry_price, :natural_percent, :natural_gain, :business_percent, :business_gain, :coin_price,
-			:discount, :unit_measurement, :default_quantity, :product_id, :description, :iva)
+			:discount, :unit_measurement, :default_quantity, :product_id, :description, :iva, :business_price, :natural_price)
 	end
 
 end
