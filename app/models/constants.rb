@@ -3,6 +3,10 @@ class Constants
 	# Paginations
 	ITEMS_PER_PAGE = 20
 
+	# Orders types
+	ORDER_BUSINESS = 0
+	ORDER_HOME = 1
+
 	# Paymodes
 	PAY_MODE_CASH = 0
 	PAY_MODE_CREDIT_BUSINESS = 1
@@ -22,6 +26,7 @@ class Constants
 	# Measurement type
 	MEASUREMENT_LT = 0
 	MEASUREMENT_KG = 1
+	MEASUREMENT_UND = 2
 
 	#Income-Expenses
 	MOV_TYPE_INCOME = 0

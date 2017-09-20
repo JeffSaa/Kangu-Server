@@ -14,7 +14,9 @@ class V1::Orders::OrdersController < ApplicationController
 			total = 0
 			params[:products].each do |p|
 				op = OrderProduct.new(orderproduct_params(p))
-				op.price = get_product_price(ProductVariant.find(op.variant_id))
+				if order.order_type == Constants::ORDER_BUSINESS
+					op.price = ProductVariant.find(op.variant_id).business_price
+				end
 				total += op.price * op.quantity
 				op.last_quantity = op.quantity
 				op.order_id = order.id
