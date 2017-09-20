@@ -39,7 +39,7 @@ class V1::Products::ProductsController < ApplicationController
 		#products = Product.where("name like '#{q}%'").paginate(:per_page => Constants::PRODUCT_PER_PAGE,
 			#:page => params[:page])
 		#set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
-		render :json => {model: products}, status: :ok
+		render :json => products, status: :ok
 	end
 
 	private
