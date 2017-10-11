@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
 
+	include ActionController::MimeResponds
+
 	def upload_blob(blob_name, file, id)
 		if Rails.env.production?
 			client = Azure::Storage::Client.create(:storage_account_name => "kangublobs", :storage_access_key => "PEyVyYYVrIFyC7FfkwqsKlkYqOJknqkZGFp3vGglTW+gHwO5vacOXEXE6i3ZKzKVBPwvQmv7Y2FUxx8xcFX+Wg==")

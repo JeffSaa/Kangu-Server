@@ -1,5 +1,5 @@
 class V1::Administration::AccountingController < ApplicationController
-	before_action :validate_authentification_token
+	before_action :validate_authentification_token, :except => [:download_csv]
 
 	def close_day
 		response = {total: 0, model: []}
@@ -75,6 +75,21 @@ class V1::Administration::AccountingController < ApplicationController
 	def income_expenses_movements
 		response = Wallet.where(date: params[:date])
 		render :json => response, status: :ok
+	end
+
+	def download_csv
+		csv_string = CSV.generate do |csv|
+			csv << ["SKU", "Name", "Natural Price", "Business Price", "Categories"]
+			ProductVariant.all.each do |v|
+				sub = Categorie.find(Product.find(v.product_id).subcategorie_id)
+				cat = Categorie.find(sub.categorie_id)
+				cat_s = cat.name.capitalize+" > "+sub.name.capitalize
+				csv << [v.id,v.name.capitalize,v.natural_price,v.business_price,cat_s]
+			end
+		end
+		respond_to do |format|
+			format.csv { send_data csv_string }
+		end
 	end
 
 	private
