@@ -1,5 +1,5 @@
 class V1::Administration::AccountingController < ApplicationController
-	before_action :validate_authentification_token, :except => [:download_csv]
+	before_action :validate_authentification_token, :except => [:download_csv, :upload_csv]
 
 	def close_day
 		response = {total: 0, model: []}
@@ -78,18 +78,38 @@ class V1::Administration::AccountingController < ApplicationController
 	end
 
 	def download_csv
-		csv_string = CSV.generate do |csv|
-			csv << ["SKU", "Name", "Natural Price", "Business Price", "Categories"]
+		csv_string = CSV.generate(:col_sep => "|") do |csv|
+			csv << ["ID", "Name", "Precio Entrada", "Natural Price", "Business Price", "IVA", "Cantidad Default", "Categories", "Subcategorie ID"]
 			ProductVariant.all.each do |v|
 				sub = Categorie.find(Product.find(v.product_id).subcategorie_id)
 				cat = Categorie.find(sub.categorie_id)
 				cat_s = cat.name.capitalize+" > "+sub.name.capitalize
-				csv << [v.id,v.name.capitalize,v.natural_price,v.business_price,cat_s]
+				csv << [v.id,v.name.capitalize,v.entry_price,v.natural_price,v.business_price,v.iva,v.default_quantity,cat_s,sub.id]
 			end
 		end
 		respond_to do |format|
 			format.csv { send_data csv_string }
 		end
+	end
+
+	def upload_csv
+		csv_file = params[:file].tempfile.read
+		csv = CSV.parse(csv_file, :headers => true)
+		updates = {products: [], variants: []}
+		csv.each do |l|
+			p_info = l.to_s.force_encoding('UTF-8').split("|")
+			data = {name: p_info[1], entry_price: p_info[2], natural_price: p_info[3], business_price: p_info[4], iva: p_info[5],
+				default_quantity: p_info[6]}
+			v = ProductVariant.find_by(id: p_info[0])
+			p = Product.find_by(id: v.product_id)
+			if v and p
+				v.update(data)
+				p.update(subcategorie_id: p_info[8])
+				updates[:products] << p
+				updates[:variants] << v
+			end
+		end
+		render :json => {variants: updates[:variants].count, products: updates[:products].count}, status: :ok
 	end
 
 	private

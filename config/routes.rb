@@ -66,6 +66,7 @@ Rails.application.routes.draw do
 			get :inventory_movements, to: :inventory_movements, controller: :accounting
 			get :income_expenses_movements, to: :income_expenses_movements, controller: :accounting
 			get :download_csv, to: :download_csv, controller: :accounting
+			post :upload_csv, to: :upload_csv, controller: :accounting
 		end
 
 		namespace :creditnote do
