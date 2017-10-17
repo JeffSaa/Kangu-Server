@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170919231754) do
+ActiveRecord::Schema.define(version: 20171012162324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,10 @@ ActiveRecord::Schema.define(version: 20170919231754) do
     t.integer  "interest_count",    default: 0
     t.boolean  "is_payed",          default: false
     t.uuid     "uid",               default: -> { "uuid_generate_v4()" }
+    t.string   "wc_name"
+    t.string   "wc_lastname"
+    t.string   "wc_address"
+    t.bigint   "wc_phone",          default: 0
   end
 
   create_table "product_groups", force: :cascade do |t|

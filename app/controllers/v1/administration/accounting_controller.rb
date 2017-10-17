@@ -78,7 +78,7 @@ class V1::Administration::AccountingController < ApplicationController
 	end
 
 	def download_csv
-		csv_string = CSV.generate(:col_sep => "|") do |csv|
+		csv_string = CSV.generate(:col_sep => ";") do |csv|
 			csv << ["ID", "Name", "Precio Entrada", "Natural Price", "Business Price", "IVA", "Cantidad Default", "Categories", "Subcategorie ID"]
 			ProductVariant.all.each do |v|
 				sub = Categorie.find(Product.find(v.product_id).subcategorie_id)
@@ -97,7 +97,7 @@ class V1::Administration::AccountingController < ApplicationController
 		csv = CSV.parse(csv_file, :headers => true)
 		updates = {products: [], variants: []}
 		csv.each do |l|
-			p_info = l.to_s.force_encoding('UTF-8').split("|")
+			p_info = l.to_s.force_encoding('UTF-8').split(";")
 			data = {name: p_info[1], entry_price: p_info[2], natural_price: p_info[3], business_price: p_info[4], iva: p_info[5],
 				default_quantity: p_info[6]}
 			v = ProductVariant.find_by(id: p_info[0])

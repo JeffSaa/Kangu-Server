@@ -1,13 +1,15 @@
 class V1::Orders::OrdersController < ApplicationController
-	before_action :validate_authentification_token, :except => [:show_by_uid]
 
 	def create
 		order = Order.new(order_params)
-		if charge_exist(@current_user, Constants::KANGU_ADMIN)
-			order.status = params[:status]
-			order.target_id = params[:target_id]
-		else
-			order.target_id = @current_user.id
+		if request.headers["Authorization"]
+			validate_authentification_token()
+			if charge_exist(@current_user, Constants::KANGU_ADMIN)
+				order.status = params[:status]
+				order.target_id = params[:target_id]
+			else
+				order.target_id = @current_user.id
+			end
 		end
 		response = {order_info: order, products: []}
 		if order.save
@@ -16,6 +18,8 @@ class V1::Orders::OrdersController < ApplicationController
 				op = OrderProduct.new(orderproduct_params(p))
 				if order.order_type == Constants::ORDER_BUSINESS
 					op.price = ProductVariant.find(op.variant_id).business_price
+				else
+					op.price = ProductVariant.find(op.variant_id).natural_price
 				end
 				total += op.price * op.quantity
 				op.last_quantity = op.quantity
@@ -91,13 +95,20 @@ class V1::Orders::OrdersController < ApplicationController
 						cash_id: Constants::CASH_MINOR)
 					w.balance = last_wallet.balance + order.total
 					w.cash_balance = cash_balance.present? ? cash_balance.cash_balance + order.total : (order.total)
-					if p.update(price: get_product_price(variant), iva: variant.iva) and variant.update(variant_stock: q_temp) and ie.save and w.save
+					if order.order_type == Constants::ORDER_BUSINESS
+						price = variant.business_price
+					else
+						price = variant.natural_price
+					end
+					if p.update(price: price, iva: variant.iva) and variant.update(variant_stock: q_temp) and ie.save and w.save
 						total += p.price * p.quantity
 					end
 				end
 			end
-			sucursal = BusinessSucursal.find(order.target_id)
-			sucursal.update(order_count: sucursal.order_count + 1)
+			if order.order_type == Constants::ORDER_BUSINESS
+				sucursal = BusinessSucursal.find(order.target_id)
+				sucursal.update(order_count: sucursal.order_count + 1)
+			end
 			consecutive = Order.where(status: 3).count + Order.where(status: 4).count + Order.where(status: 2).count + 1
 			order.update(consecutive: consecutive, total: total, status: order.status+1)
 			render :json => order, status: :ok
@@ -220,9 +231,14 @@ class V1::Orders::OrdersController < ApplicationController
 			order_products.where(iva: i).each{|op| total += op.price * op.quantity}
 			iva << [total ,i * total / 100]
 		end
-		sucursal = BusinessSucursal.find(order.target_id)
-		place = BusinessPlace.find(sucursal.business_id)
-		return {order: order, products: products, sucursal: sucursal, place: place, iva: iva}
+		o =  {order: order, products: products, sucursal: nil, place: nil, iva: iva}
+		sucursal = BusinessSucursal.find_by(id: order.target_id)
+		if sucursal
+			place = BusinessPlace.find_by(id: sucursal.business_id)
+			o[:place] = place
+			o[:sucursal] = sucursal
+		end
+		return o
 	end
 
 	def update_orderproduct_params(p)
@@ -241,7 +257,7 @@ class V1::Orders::OrdersController < ApplicationController
 	end
 
 	def order_params
-		params.permit(:comment, :datehour, :order_type, :pay_mode)
+		params.permit(:comment, :datehour, :order_type, :pay_mode, :wc_name, :wc_lastname, :wc_address, :wc_phone)
 	end
 
 	def orderproduct_params(p)
