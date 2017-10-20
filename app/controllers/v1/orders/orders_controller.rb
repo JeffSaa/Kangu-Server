@@ -12,7 +12,7 @@ class V1::Orders::OrdersController < ApplicationController
 			end
 		end
 		response = {order_info: order, products: []}
-		if order.save
+		if order
 			total = 0
 			params[:products].each do |p|
 				op = OrderProduct.new(orderproduct_params(p))
@@ -25,7 +25,7 @@ class V1::Orders::OrdersController < ApplicationController
 				op.last_quantity = op.quantity
 				op.order_id = order.id
 				op.iva = ProductVariant.find(p[:variant_id]).iva
-				if op.save
+				if op
 					response[:products] << op
 				end
 			end
@@ -57,7 +57,7 @@ class V1::Orders::OrdersController < ApplicationController
 		end
 	end
 
-	def add_product
+	def add_product	#Agregar producto auna orden.
 		op = OrderProduct.new(orderproduct_params(params[:model]))
 		response = Order.find(params[:model][:order_id])
 		op.order_id = response.id
@@ -67,7 +67,7 @@ class V1::Orders::OrdersController < ApplicationController
 		end
 	end
 
-	def update_product
+	def update_product #Editar un producto de una orden
 		op = OrderProduct.find(params[:id])
 		order = Order.find(op.order_id)
 		temp_total = op.price * op.quantity
@@ -77,10 +77,10 @@ class V1::Orders::OrdersController < ApplicationController
 		end
 	end
 
-	def advance
+	def advance	#Avanzar de estado una orden
 		order = Order.find(params[:id])
 		case order.status
-		when 1
+		when 1 #Pasa de orden a factura
 			total = 0
 			products = OrderProduct.where(order_id: order.id)
 			group = InventoryEntryGroup.new(date: order.datehour.to_date, is_entry: false)
@@ -88,8 +88,8 @@ class V1::Orders::OrdersController < ApplicationController
 				products.each do |p|
 					variant = ProductVariant.find(p.variant_id)
 					q_temp = variant.variant_stock -= p.quantity
-					ie = InventoryEntry.new(variant_id: variant.id, quantity: p.quantity, group_id: group.id, variant_stock: q_temp)
-					cash_balance = Wallet.where(cash_id: Constants::CASH_MINOR).last
+					ie = InventoryEntry.new(variant_id: variant.id, quantity: p.quantity, group_id: group.id, variant_stock: q_temp) #Crea una entrada de inventario
+					cash_balance = Wallet.where(cash_id: Constants::CASH_MINOR).last #Busca el ultimo registro de la caja menor y actualiza la cartera
 					last_wallet = Wallet.last
 					w = Wallet.new(date: order.datehour.to_date, total: order.total, mov_type: Constants::MOV_TYPE_INCOME, source_type: Constants::RECAUDO_VENTAS,
 						cash_id: Constants::CASH_MINOR)
@@ -138,7 +138,7 @@ class V1::Orders::OrdersController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def day_shop
+	def day_shop	#Obtener compras del dia
 		orders = Order.where(status: 1)
 		products = []
 		duplicates = []

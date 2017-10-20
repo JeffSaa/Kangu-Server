@@ -54,7 +54,7 @@ class V1::Businessplace::BusinessplaceController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def credit_status
+	def credit_status	#Mirar el estado de credito de un negocio
 		place = BusinessPlace.find_by(uid: params[:uid])
 		response = {place: place, total_expired: 0, orders: []}
 		BusinessSucursal.where(business_id: place.id).each do |b|

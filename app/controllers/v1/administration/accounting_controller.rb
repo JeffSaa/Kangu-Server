@@ -1,16 +1,16 @@
 class V1::Administration::AccountingController < ApplicationController
 	before_action :validate_authentification_token, :except => [:download_csv, :upload_csv]
 
-	def close_day
+	def close_day # Cierre diario
 		response = {total: 0, model: []}
 		day = DateTime.parse params[:day]
-		orders = Order.where(status: 3).where('datehour BETWEEN ? AND ?', day.beginning_of_day, day.end_of_day)
+		orders = Order.where(status: 3).where('datehour BETWEEN ? AND ?', day.beginning_of_day, day.end_of_day) # Toma todas las ordens del rango
 		orders.each do |o|
 			products = []
 			OrderProduct.where(order_id: o.id).each{|op| products << get_orderproduct_info(op)}
 			response[:total] += o.total
 			notes = []
-			CreditNote.where(order_id: o.id).each do |cn|
+			CreditNote.where(order_id: o.id).each do |cn|	# Busca nota credito de la orden y las agrega a la respuesta
 				items = []
 				CreditNoteItem.where(note_id: cn).each do |cni|
 					order_product = OrderProduct.find(cni.product_id)
@@ -25,7 +25,7 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def inventory_entry
+	def inventory_entry	# Entrada de inventario
 		response = {group: nil, entries: []}
 		response[:group] = InventoryEntryGroup.new(group_params)
 		if response[:group].save
@@ -43,7 +43,7 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def inventory_movements
+	def inventory_movements	# Movimiento de inventario
 		response = []
 		InventoryEntryGroup.where(date: params[:date]).each do |g|
 			entries = []
@@ -56,7 +56,7 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def income_expenses
+	def income_expenses 	# Ingresos, egresos.
 		response = Wallet.new(income_expenses_params)
 		cash_balance = Wallet.where(cash_id: params[:cash_id]).last
 		last_wallet = Wallet.last
@@ -77,7 +77,7 @@ class V1::Administration::AccountingController < ApplicationController
 		render :json => response, status: :ok
 	end
 
-	def download_csv
+	def download_csv 	# Descargar variantes en CSV
 		csv_string = CSV.generate(:col_sep => ";") do |csv|
 			csv << ["ID", "Name", "Precio Entrada", "Natural Price", "Business Price", "IVA", "Cantidad Default", "Categories", "Subcategorie ID"]
 			ProductVariant.all.each do |v|
@@ -92,7 +92,7 @@ class V1::Administration::AccountingController < ApplicationController
 		end
 	end
 
-	def upload_csv
+	def upload_csv	#Recibir archivo de CSV y actualizar variantes
 		csv_file = params[:file].tempfile.read
 		csv = CSV.parse(csv_file, :headers => true)
 		updates = {products: [], variants: []}

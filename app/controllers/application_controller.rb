@@ -2,7 +2,7 @@ class ApplicationController < ActionController::API
 
 	include ActionController::MimeResponds
 
-	def upload_blob(blob_name, file, id)
+	def upload_blob(blob_name, file, id)					# To upload documents to azure. Azure adapter
 		if Rails.env.production?
 			client = Azure::Storage::Client.create(:storage_account_name => "kangublobs", :storage_access_key => "PEyVyYYVrIFyC7FfkwqsKlkYqOJknqkZGFp3vGglTW+gHwO5vacOXEXE6i3ZKzKVBPwvQmv7Y2FUxx8xcFX+Wg==")
 			blobs = client.blob_client
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::API
 		blobs.create_block_blob(container.name, id.to_s, content)
 	end
 
-	def render_user(user, token = nil)
+	def render_user(user, token = nil)						# Login respond. Show importants charges.
 		response = {token: token, user_info: user, isBusinessEmployee: false, isKanguAdmin: false, isKanguSupervisor: false}
 		if charge_exist(user, Constants::KANGU_ADMIN)
 			response[:isKanguAdmin] = true
@@ -44,22 +44,22 @@ class ApplicationController < ActionController::API
 		render :json => response, status: :ok
 	end
 
-	def set_paginate_header(per_page, model, current_page)
+	def set_paginate_header(per_page, model, current_page)	# Pagination configuration
 		self.headers['entries_per_page'] = per_page
 		self.headers['current_page'] = current_page ||= 1
 		self.headers['pages_count'] = model.total_pages
 		self.headers['total_entries'] = model.total_entries
 	end
 
-	def get_product_price(p)
+	def get_product_price(p)								# Calculate products price
 		return p[:entry_price] * p[:business_percent] / 100 + p[:entry_price] + p[:business_gain]
 	end
 
-	def render_response_json(code, status)
+	def render_response_json(code, status)					# Only a helper method
 		render :json => {code: code}, status: status
 	end
 
-	def validate_authentification_token
+	def validate_authentification_token						# Check auth token
 		@token = Token.find_by(id: request.headers["Authorization"])
 		if not @token
 			render_response_json(100, :bad_request)
@@ -72,27 +72,27 @@ class ApplicationController < ActionController::API
 		end   
 	end
 
-	def validate_token
+	def validate_token 										# Look for user belong
 		token = Token.find_by(id: request.headers["Authorization"])
 		if token
 			return User.find_by(id: token.user_id)
 		end
 	end
 
-	def charge_exist(user, type)
+	def charge_exist(user, type)							# Check charge
 		return Charge.find_by(user_id: user.id, type_id: type)
 	end
 
-	def create_charge
+	def create_charge										# Create charge helper method
 		return Charge.new(charge_params)
 	end
 
-	def getPlaceOwner(id)
+	def getPlaceOwner(id)									# Get place Owner
 		charge = Charge.find_by(target_id: id, type_id: Constants::BUSINESS_OWNER)
 		return User.find(charge.user_id)
 	end
 
-	def getSucursalAdmins(id)
+	def getSucursalAdmins(id)								# Get sucursal admins
 		charges = Charge.where(target_id: id, type_id: Constants::BUSINESS_ADMIN)
 		admins = []
 		charges.each do |c|
@@ -101,11 +101,11 @@ class ApplicationController < ActionController::API
 		return admins
 	end
 
-	def getSucursalPlace(id)
+	def getSucursalPlace(id)								# Get sucursal business place
 		return BusinessPlace.find(BusinessSucursal.find(id).business_id)
 	end
 
-	def show_console(o)
+	def show_console(o)										# Debug method
 		p "------------- DEBUG -------------"
 		p o
 		p "------------- DEBUG -------------"    
