@@ -12,7 +12,7 @@ class V1::Orders::OrdersController < ApplicationController
 			end
 		end
 		response = {order_info: order, products: []}
-		if order
+		if order.save
 			total = 0
 			params[:products].each do |p|
 				op = OrderProduct.new(orderproduct_params(p))
@@ -25,8 +25,15 @@ class V1::Orders::OrdersController < ApplicationController
 				op.last_quantity = op.quantity
 				op.order_id = order.id
 				op.iva = ProductVariant.find(p[:variant_id]).iva
-				if op
+				if op.save
 					response[:products] << op
+				end
+				if order.pay_mode == Constants::PAY_MODE_CREDIT_BUSINESS
+					sucursal = BusinessSucursal.find(order.target_id)
+					buss = BusinessPlace.find(sucursal.business_id)
+					payday = Date.today + buss.credit_term
+					order.update(pay_day: payday, next_interest_day: payday + Constants::CREDIT_EXTRA_DAY)
+					buss.update(current_deb: buss.current_deb + total, credit_fit: buss.credit_fit - total)
 				end
 			end
 			if order.update(total: total)
