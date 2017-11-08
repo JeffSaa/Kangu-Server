@@ -1,5 +1,5 @@
 class V1::Products::ProductsController < ApplicationController
-	before_action :validate_authentification_token, :except => [:search_product, :index]
+	before_action :validate_authentification_token, :except => [:search_product, :index, :products_excel_creator]
 
 	def index
 		response = []
@@ -40,6 +40,39 @@ class V1::Products::ProductsController < ApplicationController
 			#:page => params[:page])
 		#set_paginate_header(response, Constants::PRODUCT_PER_PAGE, products, params[:page])
 		render :json => products, status: :ok
+	end
+
+	def products_excel_creator
+		products = Roo::Spreadsheet.open(params[:products])
+		p_c = v_c = 0
+		products.each_with_pagename do |name, sheet|
+			d = sheet.row(1)
+			d1 = d[1].downcase
+			product = Product.new()
+			if d1 == 'kg'
+				product = Product.new(name: d[0], measurement_type: Constants::MEASUREMENT_KG, subcategorie_id: d[2])
+			elsif d1 == 'unidad'
+				product = Product.new(name: d[0], measurement_type: Constants::MEASUREMENT_UND, subcategorie_id: d[2])
+			else
+				product = Product.new(name: d[0], measurement_type:  Constants::MEASUREMENT_LT, subcategorie_id: d[2])
+			end
+			product.downcase_fields
+			if product.save
+				p_c += 1
+				for i in  3..sheet.last_row
+					d = sheet.row(i)
+					variant = ProductVariant.new(name: d[0], entry_price: d[1], default_quantity: d[2], natural_price: d[3], business_price: d[4], 
+						original_image: d[5], description: d[6])
+					variant.downcase_fields
+					if variant.save
+						p variant
+						v_c += 1
+					end
+				end
+				p '----'
+			end
+		end
+		render :json => {products: p_c, variants: v_c}
 	end
 
 	private
