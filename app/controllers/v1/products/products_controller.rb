@@ -45,9 +45,11 @@ class V1::Products::ProductsController < ApplicationController
 	def products_excel_creator
 		products = Roo::Spreadsheet.open(params[:products])
 		p_c = v_c = 0
+		prs = []
 		products.each_with_pagename do |name, sheet|
 			d = sheet.row(1)
 			d1 = d[1].downcase
+			p 'Loading page: '+name
 			product = Product.new()
 			if d1 == 'kg'
 				product = Product.new(name: d[0], measurement_type: Constants::MEASUREMENT_KG, subcategorie_id: d[2])
@@ -62,14 +64,12 @@ class V1::Products::ProductsController < ApplicationController
 				for i in  3..sheet.last_row
 					d = sheet.row(i)
 					variant = ProductVariant.new(name: d[0], entry_price: d[1], default_quantity: d[2], natural_price: d[3], business_price: d[4], 
-						original_image: d[5], description: d[6])
+						original_image: d[5], description: d[6], product_id: product.id)
 					variant.downcase_fields
 					if variant.save
-						p variant
 						v_c += 1
 					end
 				end
-				p '----'
 			end
 		end
 		render :json => {products: p_c, variants: v_c}

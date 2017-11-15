@@ -79,12 +79,17 @@ class V1::Administration::AccountingController < ApplicationController
 
 	def download_csv 	# Descargar variantes en CSV
 		csv_string = CSV.generate(:col_sep => ";") do |csv|
-			csv << ["ID", "Name", "Precio Entrada", "Natural Price", "Business Price", "IVA", "Cantidad Default", "Categories", "Subcategorie ID"]
+			csv << ["ID", "Name", "Precio Entrada", "Natural Price", "Business Price", "IVA", "Cantidad Default", "Categories", "Subcategorie ID", "Image"]
 			ProductVariant.all.each do |v|
-				sub = Categorie.find(Product.find(v.product_id).subcategorie_id)
-				cat = Categorie.find(sub.categorie_id)
-				cat_s = cat.name.capitalize+" > "+sub.name.capitalize
-				csv << [v.id,v.name.capitalize,v.entry_price,v.natural_price,v.business_price,v.iva,v.default_quantity,cat_s,sub.id]
+				pr = Product.find(v.product_id)
+				sub = nil
+				cat_s = ' - '
+				if not pr.subcategorie_id == nil
+					sub = Categorie.find(pr.subcategorie_id)
+					cat = Categorie.find(sub.categorie_id)
+					cat_s = cat.name.capitalize+" > "+sub.name.capitalize
+				end
+				csv << [v.id,v.name.capitalize,v.entry_price,v.natural_price,v.business_price,v.iva,v.default_quantity,cat_s,sub == nil ? 0 : sub.id, v.original_image]
 			end
 		end
 		respond_to do |format|
