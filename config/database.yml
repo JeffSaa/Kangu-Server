@@ -17,5 +17,5 @@ test:
 production:
   <<: *default
   database: Kangu_production
-  username: kangudb
-  password: k4ngud4t4b4s3
+  username: frepicolombia
+  password: frepi123
